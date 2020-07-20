@@ -32,9 +32,11 @@ img{
 .title{
 	background: #0070B8;
 	color:#FFF;
-	position: sticky;
+	width: 100%;
+	position: fixed;
 	top:0;
 	z-index:1;
+	height:6.5%;
 }
 .title .container{
 	align-items: center;
@@ -47,7 +49,7 @@ img{
 /*Search section*/
 .search-bar{
 	position: fixed;
-	top:6.6%;
+	top:6.5%;
 	z-index: 1;
 	width: 100%;
 	background: #FFF;
@@ -85,6 +87,9 @@ img{
 	margin-left: 1em;
 }
 /*Messages section*/
+.messages-section{
+	margin-top:3em;
+}
 .chat-container{
 	padding-top: 0.8em;
 	align-items: center;
