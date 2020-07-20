@@ -1,0 +1,170 @@
+*{
+	box-sizing: border-box;
+	font-family:'Arial', 'Helvetica', 'sans-serif';
+}
+body{
+	margin:0;
+	padding:0; 
+}
+.container{
+	width:95%;
+	margin: 0 auto;
+	max-width: 1100px;
+}
+img{
+	max-width: 100%;
+	margin: 0 auto;
+}
+.flex{
+	display: flex;
+}
+.hide{
+	display: none;
+}
+.visible{
+	display: inline-block;
+}
+.flex-space{
+	display: flex;
+	justify-content: space-between;
+}
+/*Title section*/
+.title{
+	background: #0070B8;
+	color:#FFF;
+	position: sticky;
+	top:0;
+	z-index:1;
+}
+.title .container{
+	align-items: center;
+	padding: 0.5em 0;
+}
+.header-text{
+	width:70%;
+	font-size: 1.2rem;
+}
+/*Search section*/
+.search-bar{
+	position: fixed;
+	top:6.6%;
+	z-index: 1;
+	width: 100%;
+	background: #FFF;
+	position: sticky;
+	border-bottom:1px solid #DDDDDD;
+}
+.search-input{
+	width:90%;
+	border:0;
+}
+/*Tags*/
+.tags{
+	width: 100%;
+	border-bottom: 1px solid #DDDDDD;
+}
+.tags .container{
+	padding: 0.8em 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+	display: flex;
+}
+.tags-text{
+	white-space: nowrap;
+	background-color: #DDDDDD;
+	padding:0.2em 0.5em;
+	border-radius: 20px;
+	align-self: center;
+}
+.active{
+	background: #0070B8;
+	color:#FFF;
+}
+
+.tags-text + .tags-text{
+	margin-left: 1em;
+}
+/*Messages section*/
+.chat-container{
+	padding-top: 0.8em;
+	align-items: center;
+}
+.image-container{
+	width: 2.5em;
+	height: 2.5em;
+	margin-left: 2.5%;
+}
+.profile-img{
+	border-radius:50%; 
+}
+.time{
+	color:gray;
+	font-size: 0.9rem;
+}
+.profile-details{
+	width:100%;
+	padding-bottom: 0.8em;
+	border-bottom: 1px solid #DDDDDD;
+}
+.message{
+	font-size: 0.8rem;
+	margin-top: 0.2em;
+}
+.online{
+	width: 8px;
+	height: 8px;
+	border:2px solid limegreen;
+	background-color: #FFF;
+	border-radius: 50%;
+	position: relative;
+	bottom: 30%;
+	left:80%;
+}
+
+/*Icons*/
+.back-icon{
+	background:url('Icons/back.svg');
+	background-size: 1.5em;
+	height: 2em;
+	width:2em;
+	background-position: center;
+    background-repeat: no-repeat;
+}
+.write-icon{
+	background:url('Icons/new.svg');
+	background-size: 1.5em;
+	height: 2em;
+	width:2em;
+	background-position: center;
+    background-repeat: no-repeat;
+}
+.dots-icon{
+	background:url('Icons/dots.svg');
+	background-size: 1.5em;
+	height: 2em;
+	width:2em;
+	background-position: center;
+    background-repeat: no-repeat;
+}
+.search-icon{
+	background:url('Icons/search.svg');
+	background-size: 1.5em;
+	height: 2em;
+	width:2em;
+	background-position: center;
+    background-repeat: no-repeat;
+}
+.filter-icon{
+	background:url('Icons/filter.svg');
+	background-size: 1.5em;
+	height: 2em;
+	width:2em;
+	background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+@media (min-width:800px){
+	*{
+		display: none;
+	}
+}
