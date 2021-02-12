@@ -1,102 +1,325 @@
-<!-- Credits: https://jsfiddle.net/Daniel_Hug/pvk6p/ -->
-<!DOCTYPE html>
-<html lang="en">
+<html>
+ 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <title>DeviceOrientationEvent</title>
+    <meta charset="UTF-8" />
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
 </head>
+ 
 <body>
-	<h1></h1>
-	<h2></h2>
-	<form>
-	<input type="text" id="steps" />
-	<input type="button" value="Add" id="add" />
-	</form>
-	<h3>Clear Steps</h3>
-	<script type="text/javascript">
-		/******** GLOBAL NAMESPACE AND VARIABLES ********/
-var wnt = {};
-		wnt.mobile = false;
-		wnt.ie = false;
-		wnt.steps = localStorage.steps;
-		
-/******** DEVICE TYPE AND IE DETECTION ********/
-if( navigator.userAgent.match(/Android/i)
- || navigator.userAgent.match(/webOS/i)
- || navigator.userAgent.match(/iPhone/i)
- || navigator.userAgent.match(/iPad/i)
- || navigator.userAgent.match(/iPod/i)
- || navigator.userAgent.match(/BlackBerry/i)
- ){
-	wnt.mobile = true;
-}
-if(navigator.userAgent.match(/MSIE/i)){
-		wnt.ie = true;
-}
-if(wnt.mobile == true){
-	var watchid = navigator.geolocation.watchPosition(gotPosition, errorGettingPosition, {'enableHighAccuracy':true,'timeout':10000,'maximumAge':20000});   //10 sec & 20 sec
-} else {
-	$('h1').html('You are not using a mobile device.');
-}
-
-
-/******** ONLOAD ********/
-$(function() {
-	$('h3').click(function(){
-		localStorage.clear();
-		wnt.steps = 0;
-		stepstaken(wnt.steps);
-	});
-});
-//2.5 feet = 0.762 meters (average stride)   ...   conversion factor is 3.2808
-//1 foot = 0.3048 meters
-//1 mile = 1609.344 meters
-//1 meter per second = 2.23693629 miles per hour
-function gotPosition(pos){
-	//var outputStr =	"latitude:"+ pos.coords.latitude +"<br>"+
-									"longitude:"+ pos.coords.longitude +"<br>"+
-									"accuracy:"+ pos.coords.accuracy +"<br>"+
-								
-									"altitude:"+ pos.coords.altitude +"<br>"+
-									"altitudeAccuracy:"+ pos.coords.altitudeAccuracy +"<br>"+
-									"heading:"+ pos.coords.heading +"<br>"+
-									"speed:"+ pos.coords.speed +"";
-									
-	//var metersTraveled = pos.coords.speed * 10;   //NOTE: gets speed every 10 seconds, so (pos.coords.speed * 10)  ...meterspersec * sec... = meters traveled    ...   /0.762 = steps
-	//!!!!! getting 8x the steps I should ... 2*10=20/0.762=26.2steps in 10 seconds???
-	var steps = pos.coords.speed / 0.762;
-	stepstaken(steps);
-	
-	
-	var mps = pos.coords.speed;
-	var mph = 2.23693629 * pos.coords.speed;   
-	mph = Math.round(mph*Math.pow(10,1))/Math.pow(10,1);
-	mps = Math.round(mps*Math.pow(10,1))/Math.pow(10,1);
-	$('h1').html('Current Speed<br /><span style="color:#ff0000;">'+mph+' MPH</span>');
-}
-function errorGettingPosition(err){
-	if(err.code==1){
-		alert("User denied geolocation.");
-	} else if(err.code==2){
-		alert("Position unavailable.");
-	} else if(err.code==3){
-		alert("Timeout expired.");
-	} else {
-		alert("ERROR:"+ err.message);
-	}
-}
-function stepstaken(steps){
-	wnt.steps = wnt.steps + steps;
-	localStorage.steps = wnt.steps;
-	$('h2').html('Total Steps<br /><span style="color:#ff0000;">'+Math.round(wnt.steps)+' Steps</span>');
-}
-$('#add').click(function(){
-	console.log($('#steps').val());
-	localStorage.setItem('steps',parseInt(localStorage.steps) + parseInt($('#steps').val()));
-	console.log(localStorage.getItem('steps'));
-});
-	</script>
+    <H1> simple pedometer </ h1>
+         <H2> simple pedometer -
+                 <a href="demo1.html"> restart </a>
+    </h2>
+    <hr />
+         <P> G-Sensor acquired triaxial acceleration (gravitational acceleration considerations) in real time: </ p>
+         <P> x-axis acceleration:
+        <span id="xg">0</span> m/s2
+    </p>
+         <P> y axis acceleration:
+        <span id="yg">0</span> m/s2
+    </p>
+         <P> z-axis acceleration:
+        <span id="zg">0</span> m/s2
+    </p>
+    <hr />
+         Mobile Get <h3> Sensor frequency:
+                 <Span id = "interval"> 0 </ span> ms
+    </h3>
+         <P> Start Time:
+        <span id="date">0</span>
+    </p>
+         The current step <h3>:
+                 <Span id = "count1"> 0 </ span> Step
+    </h3>
+    <hr>
+    <div id="container" style="min-width:400px;height:400px"></div>
+    <hr>
+    <script type="text/javascript">
+                 var data = []; // record data for
+                 var arr = []; // record △
+                 var status = 0; // whether the drive
+        var min = 0.5, max = 1.552188;
+        var temp = {
+            X: 0, Y: 0, Z: 0
+        };
+        var point = 0;
+        data.push(temp);
+ 
+                 // get the data from the accelerator sensor
+        var count = 0;
+        function motionHandler(event) {
+                         Html // addEventListener change in frequency of about one second 60 times, and now a second time to collect data
+            // if (count >= 15) {
+                document.getElementById("interval").innerHTML = event.interval;
+                var accGravity = event.accelerationIncludingGravity;
+                document.getElementById("xg").innerHTML = accGravity.x;
+                document.getElementById("yg").innerHTML = accGravity.y;
+                document.getElementById("zg").innerHTML = accGravity.z;
+ 
+                                 onSensorChanged (accGravity.x, accGravity.y, accGravity.z); // record data
+                count = 0;
+            // }
+            // count++;
+        }
+                 // store triaxial data
+        var oriValues = [];
+                 // current value of the sensor
+        var gravityNew = 0;
+ 
+        function onSensorChanged(x, y, z) {
+            oriValues[0] = x;
+            oriValues[1] = y;
+            oriValues[2] = z;
+            gravityNew = Math.sqrt(oriValues[0] * oriValues[0] + oriValues[1] * oriValues[1] + oriValues[2] * oriValues[2]);
+            point = gravityNew;
+            detectorNewStep(gravityNew);
+        }
+ 
+        /*
+         * Detection steps, and start counting steps
+         * Data 1. The incoming sersor
+         * 2. If the peak is detected, the time difference and the conditions and meet the threshold, it is determined that a step
+         * 3. meet the time difference condition, the difference is greater than the initialValue peaks and valleys, the difference value is included in the calculation of the threshold
+    * */
+                 // value of the last sensor
+        var gravityOld = 0;
+                 // last peak time
+        var timeOfLastPeak = 0;
+                 // The peak time
+        var timeOfThisPeak = 0;
+                 // time difference peaks and valleys
+        var TimeInterval = 250;
+                 // current time
+        var timeOfNow = 0;
+                 // wave peak
+        var peakOfWave = 0;
+                 // initial threshold
+        var ThreadValue = 2.0;
+                 // dynamically dynamic threshold data, the threshold value for the dynamic data
+        var InitialValue = 1.3;
+        var count1 = 0;
+        function detectorNewStep(values) {
+            if (gravityOld == 0) {
+                gravityOld = values;
+            } else {
+                if (detectorPeak(values, gravityOld)) {
+                    timeOfLastPeak = timeOfThisPeak;
+                    timeOfNow = Date.now();
+                    // System.currentTimeMillis
+                    if (timeOfNow - timeOfLastPeak >= TimeInterval
+                        && (peakOfWave - valleyOfWave >= ThreadValue)) {
+                        timeOfThisPeak = timeOfNow;
+                        /*
+                                                   * Update processing interface, not related to the algorithm
+                                                   * General before notifying update interface, add the following processing, in order to deal with lost-motion:
+                                                   10 * 1. Continuous recording began pedometer
+                                                   * 2. example 9 step a user stops record more than 3 seconds, the preceding recording fails, the next scratch
+                                                   * 3. Continuous recording a 9-step the user is still movement, before the data is valid
+                         * */
+                        // mStepListeners.countStep();
+                        document.getElementById("count1").innerHTML = count1++;
+                    }
+                    if (timeOfNow - timeOfLastPeak >= TimeInterval
+                        && (peakOfWave - valleyOfWave >= InitialValue)) {
+                        timeOfThisPeak = timeOfNow;
+                        ThreadValue = peakValleyThread(peakOfWave - valleyOfWave);
+                    }
+                }
+            }
+            gravityOld = values;
+        }
+        /*
+                           * Peak detection
+                           * The following four conditions determines peaks:
+                           * 1. The present point decline: isDirectionUp is false
+                           * 2. point before the rise: lastStatus to true
+                           * 3. Until peaks rising than 2 times
+                           4. The peak value is greater than 20 *
+                           * Record trough value
+                           * 1. FIG observed waveform can be found in the appearances of the steps, the next peak is a trough, wherein there are more obvious and the difference
+                           * 2. Therefore, each of the valley value to be recorded, and to make the next comparison peak
+             *
+        */
+ 
+                 // state point, up or down
+        var lastStatus = false;
+                 // if the rising flag
+        var isDirectionUp = false;
+                 // the number continues to rise
+        var continueUpCount = 0;
+                 // number of times that continue to rise, in order to record the number of peaks rise
+        var continueUpFormerCount = 0;
+                 // trough value
+        var valleyOfWave = 0;
+        function detectorPeak(newValue, oldValue) {
+            lastStatus = isDirectionUp;
+            if (newValue >= oldValue) {
+                isDirectionUp = true;
+                continueUpCount++;
+            } else {
+                continueUpFormerCount = continueUpCount;
+                continueUpCount = 0;
+                isDirectionUp = false;
+            }
+ 
+            if (!isDirectionUp && lastStatus
+                && (continueUpFormerCount >= 2 || oldValue >= 20)) {
+                peakOfWave = oldValue;
+                return true;
+            } else if (!lastStatus && isDirectionUp) {
+                valleyOfWave = oldValue;
+                return false;
+            } else {
+                return false;
+            }
+        }
+ 
+        /*
+                   * Calculated threshold value
+                   * 1 is calculated by the difference between the peaks and valleys threshold
+                   2. 4 * values ​​recorded, stored tempValue [] array
+                   * 3. In the array passed to the function is calculated threshold averageValue
+         * */
+                 // crests and troughs for storing a difference threshold is calculated
+        var ValueNum = 4;
+        var tempValue = new Array(ValueNum);
+        var tempCount = 0;
+        function peakValleyThread(value) {
+            var tempThread = ThreadValue;
+            if (tempCount < ValueNum) {
+                tempValue[tempCount] = value;
+                tempCount++;
+            } else {
+                tempThread = averageValue(tempValue, ValueNum);
+                for (var i = 1; i < ValueNum; i++) {
+                    tempValue[i - 1] = tempValue[i];
+                }
+                tempValue[ValueNum - 1] = value;
+            }
+            return tempThread;
+        }
+ 
+        /*
+                   * Graded threshold
+                   1. Calculate the mean array *
+                   2. * mean gradient of the threshold value in a range where
+         * */
+        function averageValue(value, n) {
+            var ave = 0;
+            for (var i = 0; i < n; i++) {
+                ave += value[i];
+            }
+            ave = ave / ValueNum;
+            if (ave >= 8)
+                ave = 4.3;
+            else if (ave >= 7 && ave < 8)
+                ave = 3.3;
+            else if (ave >= 4 && ave < 7)
+                ave = 2.3;
+            else if (ave >= 3 && ave < 4)
+                ave = 2.0;
+            else {
+                ave = 1.3;
+            }
+            return ave;
+        }
+        if (window.DeviceMotionEvent) {
+            window.addEventListener("devicemotion", motionHandler, false);
+        } else {
+            document.body.innerHTML = "What user agent u r using???";
+        }
+ 
+                 //Get Time 
+        function getNowTime() {
+            var date = new Date();
+            var Hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+            var Minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+            var Seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+            var time = Hours + ':' + Minutes + ':' + Seconds;
+            return time;
+        }
+        document.getElementById("date").innerHTML = getNowTime();
+ 
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        function activeLastPointToolip(chart) {
+            var points = chart.series[0].points;
+            chart.tooltip.refresh(points[points.length - 1]);
+        }
+        $('#container').highcharts({
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg,
+                marginRight: 100,
+                events: {
+                    load: function () {
+                        var series = this.series[0],
+                            chart = this;
+                        setInterval(function () {
+                            var x = (new Date()).getTime(),
+                                y = point;
+                            series.addPoint([x, y], true, true);
+                            activeLastPointToolip(chart)
+                        }, 1000);
+                    }
+                }
+            },
+            title: {
+                                 text: 'live data'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                                         text: 'value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 6);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                                 name: 'per second value'
+                data: (function () {
+                    var data = [],
+                        time = (new Date()).getTime(),
+                        i;
+                    for (i = -100; i <= 0; i += 1) {
+                        data.push({
+                            x: time + i * 1000,
+                            y: 0
+                        });
+                    }
+                    return data;
+                }())
+            }]
+        }, function (c) {
+            activeLastPointToolip(c)
+        });
+    </script>
 </body>
+ 
 </html>
