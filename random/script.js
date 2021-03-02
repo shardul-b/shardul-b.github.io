@@ -18,11 +18,19 @@ function randomGen(value){
 	return Math.floor(Math.random()*value);
 }
 function copyText(){
-	var textrange = document.createRange();
-	textrange.selectNode(document.getElementById('password'));
-	window.getSelection().addRange(textrange);
-	document.execCommand("copy");
-	alert("Text copied");
+	if (document.selection) {
+	    var textrange = document.body.createTextRange();
+	    textrange.moveToElementText(document.getElementById('password'));
+	    textrange.select().createTextRange();
+	    document.execCommand("copy");
+	    alert('Chrome')
+  	}else{
+	    var textrange = document.createRange();
+	    textrange.selectNode(document.getElementById('password'));
+	    window.getSelection().addRange(textrange);
+	    document.execCommand("copy");
+	    alert("Text has been copied, now paste in the text-area")
+  	}
 }
 function calc(){
 	//No need of array now as we can simply concatenate letters/nums/special chars
