@@ -20,12 +20,13 @@ function randomGen(value){
 function copyText(){
 	let input=document.createElement('input');
 	input.type='text';
-	input.value=document.getElementById('password').innerHTML;
+	let text=document.getElementById('password').innerHTML;
+    	input.value=text;
 	document.body.appendChild(input);
 	input.select();
 	document.execCommand('copy');
 	document.body.removeChild(input);
-	alert('Text Copied:');
+	alert('Text Copied:'+text);
 }
 function calc(){
 	//No need of array now as we can simply concatenate letters/nums/special chars
