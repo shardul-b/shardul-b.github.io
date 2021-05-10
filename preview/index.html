@@ -12,22 +12,38 @@
 			width:60%;
 			margin:0 auto;
 		}
+		figcaption{
+			text-align: center;
+		}
 	</style>
 </head>
 <body>
-    <!-- Take png or jpg File input from user-->
+	<!-- Take png or jpg File input from user-->
 	<input type="file" id="image" accept="image/png, image/jpeg" onchange="preview()">
-	<div class='image-container'>
+	<!-- Changed div to figure tag based on the suggestion here:
+		 https://stackoverflow.com/questions/10128950/how-to-write-a-caption-under-an-image
+	 -->
+	<figure class='image-container'>
 		<img id='display'>
-	</div>
+		<figcaption id='caption'></figcaption>
+	</figure>
 	<script>
         let image=document.getElementById('image');
         let display=document.getElementById('display');
+        let caption=document.getElementById('caption');
         function preview(){
             //The FileReader object helps to read contents of file stored on computer
             let reader= new FileReader();
             //readAsDataURL reads the content of input File
             reader.readAsDataURL(image.files[0]);
+            //console.log(image.files[0])
+            /*
+                image.files[0] contains the  details about uploaded file (uncomment above console log to see the details)
+
+                In below line we display the name of file. The file name was in the format "filename.jpg/png" so I displayed only the name and removed the file format (jpg/png) using split
+
+            */ 
+            caption.innerText=image.files[0].name.split('.')[0];
             reader.onload=()=>{	
                 //onload is triggered after file reading operation is successfully completed.
                 //set src attribute of image to the result/input File 
