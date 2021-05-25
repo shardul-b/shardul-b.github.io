@@ -73,9 +73,9 @@
             background: rgba(255,0,0,0.6);
             border: 0;
             border-radius: 50%;
-            margin-top:-5px;
             /*Respond to pointer event*/
             pointer-events: auto;
+            margin-top:-5px;
         }
         input[type="range"]::-moz-range-thumb{
             -webkit-appearance: none;
@@ -104,7 +104,7 @@
 <body>
     <div class="container">
         <input type="range" min="0" max="100" value="0" oninput="slide()" id="slider1">
-        <input type="range" min="0" max="100" value="0" oninput="slide()" id="slider2">
+        <input type="range" min="0" max="100" value="10" oninput="slide()" id="slider2">
         <!-- 
             If you want negative values then uncomment this and comment above code
             <input type="range" min="-50" max="0" value="50" oninput="slide_left()" id="slider1">
@@ -126,10 +126,21 @@
         window.onload=()=>slide();
         /*Display values based on range*/
         function slide(){
-            let slideValue_left = document.getElementById("slider1").value;
-            document.getElementById('range1').innerText=slideValue_left; 
-            let slideValue_right = document.getElementById("slider2").value;
-            document.getElementById('range2').innerText=slideValue_right;
+            let displayValue_left=document.getElementById('range1');
+            let displayValue_right=document.getElementById('range2');
+            let slideValue_left = document.getElementById("slider1");            
+            let slideValue_right = document.getElementById("slider2");
+            //Check if difference of left and right slider is less than or equal to 5
+            if(parseInt(slideValue_right.value)-parseInt(slideValue_left.value)<=5){
+                //if yes then set left slider value to value of right slider-5
+                document.getElementById("slider1").value=slideValue_right.value-5;
+                //if left slider value=0 right slider value = 5(to maintain gap)
+                if(parseInt(slideValue_left.value)==0){
+                    document.getElementById("slider2").value=parseInt(slideValue_left.value)+5;
+                }
+            }
+            document.getElementById('range1').innerText=slideValue_left.value;
+            document.getElementById('range2').innerText=slideValue_right.value; 
         }
     </script>
 </body>
