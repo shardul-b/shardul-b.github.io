@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Multiple Image Preview</title>
+	<style type="text/css">
+		img{
+			max-width:100%;
+		}
+		.image-container{
+			width:60%;
+			margin:0 auto;
+		}
+		figcaption{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<!-- Take png or jpg File input from user-->
+	<input type="file" id="image" accept="image/png, image/jpeg" onchange="preview()" multiple>
+	<!-- Changed div to figure tag based on the suggestion here:
+		 https://stackoverflow.com/questions/10128950/how-to-write-a-caption-under-an-image
+	 -->
+	<div id="images">
+
+	</div>
+	<script type="text/javascript">
+    // File input reference
+    let image=document.getElementById("image");
+    // Div Reference
+    let images_div=document.getElementById('images');
+    function preview(){
+      //image.files contains the details about uploaded files
+      //Loop through all files
+      for(i of image.files){
+        //The FileReader object helps to read contents of file stored on computer
+        let reader= new FileReader();
+        //Create figure tag
+        let figure=document.createElement('figure');
+        figure.classList.add('image-container');
+        //Create figcation tag
+        let figcap=document.createElement('figcaption');
+        // We display the name of file. The file name was in the format "filename.jpg/png" so display only the name and we remove the file format (jpg/png) using split
+        figcap.innerText=i.name.split('.')[0];
+        //append figcaption tag to figure
+        figure.appendChild(figcap);
+        //onload is triggered after file reading operation is successfully completed.
+        reader.onload=()=>{
+          //Create Image tag
+          let img=document.createElement('img');
+          img.classList.add('display');
+          //set src attribute of image to the result/input File
+          img.setAttribute('src', reader.result);
+          //insertBefore as onload part gets executed after the outer code statements and we needed image above caption
+          figure.insertBefore(img,figcap);			
+        }
+        //Append figure tag to div
+        images_div.appendChild(figure);
+        //readAsDataURL reads the content of input File
+        reader.readAsDataURL(i)		
+      }	
+    } 
+  </script>
+</body>
+</html>
