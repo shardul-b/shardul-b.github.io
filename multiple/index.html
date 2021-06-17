@@ -33,6 +33,8 @@
     let images_div=document.getElementById('images');
     function preview(){
       //image.files contains the details about uploaded files
+      //Display's Length
+       console.log(image.files.length)
       //Loop through all files
       for(i of image.files){
         //The FileReader object helps to read contents of file stored on computer
