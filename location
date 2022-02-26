@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location</title>
+</head>
+
+<body>
+  <div id="location-details"></div>
+  <button id="getLocation">Get Location</button>
+  <script>
+    let locationButton = document.getElementById('getLocation');
+    let locationDiv = document.getElementById('location-details');
+    //Error Checks
+    const checkError = (error) => {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+        locationDiv.innerHTML = 'Please allow access to location';
+        break;
+        case error.POSITION_UNAVAILABLE:
+        //usually fired for Firefox- For some reason Firefox displays correct location after many refreshes
+        locationDiv.innerHTML = 'Location information unavailable.';
+        break;
+        case error.TIMEOUT:
+        locationDiv.innerHTML = 'The request to get user location timed out.';
+        break;
+    }
+    };
+    locationButton.addEventListener('click', () => {
+    //Geolocation API is used to get the geographical position of a user and is available inside navigator object.
+    if (navigator.geolocation) {
+        //retuns position (latitude and longitude) or error
+        navigator.geolocation.getCurrentPosition(showLocation, checkError);
+    } else {
+        //For old browser. i.e Internet Explorer
+        locationDiv.innerHTML = 'The Browser Does not Support Geolocation';
+    }
+    });
+    //main logic
+    const showLocation = async (position) => {
+    /*
+        We use the Nominatim API based on openStreetMap for getting actual address from latitude and longitude
+        Link: https://nominatim.org/release-docs/develop/api/Reverse/
+
+        We can use Google maps API too but many articles said they return map snippet
+    */
+    let response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
+    );
+    //store response object
+    let data = await response.json();
+    /*
+    data.display_name gives whole address, 
+    if you want it seperately (street,city,state) then:
+    data.address wound give you an object like:
+    
+    example 1(my own location):
+    {
+        "building": "building name",
+        "road": "road",
+        "city_district": "",
+        "city": "Mumbai",
+        "municipality": "Mumbai Metropolitan Region",
+        "state_district": "Mumbai Suburban",
+        "state": "Maharashtra",
+        "postcode": "400067",
+        "country": "India",
+        "country_code": "in"
+    }
+    example 2(some random location):
+    {county: 'Risod', state_district: 'Washim', state: 'Maharashtra', country: 'India', country_code: 'in'}
+
+    Then you can access whatever you require by writing data.address."required parameter"
+    eg:
+    console.log(data.address.state)//returns Maharashtra
+
+    I didn't use this cause some parameters are different for each address
+    */
+    locationDiv.innerHTML = data.display_name;
+    };
+
+  </script>
+</body>
+
+</html>
