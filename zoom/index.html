@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoom Image</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      overflow: none;
+    }
+
+    .image-container {
+      /* Adjust width of container and image would adjust itself  */
+      width: 30%;
+      margin: 5% 0 0 5%;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    #overlay {
+      display: none;
+      background: url('https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80');
+      position: absolute;
+      background-repeat: no-repeat;
+      /* Adjust width, height and margins according to requirements */
+      width: 25%;
+      height: 35%;
+      margin-top: -30%;
+      margin-left: 50%;
+      border: 2px solid #555;
+      z-index: 1000;
+    }
+
+    #mouse-overlay {
+      cursor: zoom-in;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 2em;
+      height: 2em;
+      border-radius: 50%;
+      background-color: rgba(245, 245, 245, 0.6);
+    }
+
+    @media only screen and (max-width: 768px) {
+      .image-container {
+        width: 55%;
+      }
+
+      #overlay {
+        margin-left: 75%;
+        width: 25%;
+        height: 15%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="image-container" id="image-container">
+    <img
+      src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+      id="product-image" alt="shoe">
+  </div>
+  <div id="mouse-overlay"> </div>
+  <div id="overlay"></div>
+  <script>
+      //Intial References
+let imageContainer = document.getElementById('image-container');
+let productImage = document.getElementById('product-image');
+let overlay = document.getElementById('overlay');
+let mouseOverlay = document.getElementById('mouse-overlay');
+//events object(stores events for touch, mouse)
+let events = {
+  mouse: {
+    move: 'mousemove',
+  },
+  touch: {
+    move: 'touchmove',
+  },
+};
+//initially blank
+let deviceType = '';
+//checks for device type
+function is_touch_device() {
+  try {
+    //We try to create TouchEvent (it would fail for desktops and throw error)
+    deviceType = 'touch';
+    document.createEvent('TouchEvent');
+    return true;
+  } catch (e) {
+    deviceType = 'mouse';
+    return false;
+  }
+}
+//hides overlay
+const hideElement = () => {
+  overlay.style.display = 'none';
+  mouseOverlay.style.display = 'none';
+};
+
+//check device so that deviceType variable is set to touch or mouse
+is_touch_device();
+/*
+  in addEventListener we use the events object to set the event
+  so deviceType would be set to either "touch" or "mouse" since we called is_touch_device() above
+  
+  so for eg. 
+  if deviceType="mouse" 
+  
+  the statement for event would be
+  events[mouse].move which equals to mousemove 
+
+  if deviceType="touch" 
+  
+  the statement for event would be
+  events[touch].move which equals to touchstart 
+  */
+imageContainer.addEventListener(events[deviceType].move, (e) => {
+ 
+  //Try, catch to avoid any errors for touch screens(Error thrown when user doesn't move his finger)
+
+  try {
+    /*
+    pageX and pageY return the position of client's cursor from top left of screen 
+  */
+    var x = !is_touch_device() ? e.pageX : e.touches[0].pageX;
+    var y = !is_touch_device() ? e.pageY : e.touches[0].pageY;
+  } catch (e) {}
+  //get image height and width
+  let imageWidth = imageContainer.offsetWidth;
+  let imageHeight = imageContainer.offsetHeight;
+  /*
+    check if mouse goes out of image container
+    Condition checked:
+    x-marginLeft<15(for left side)
+    imageWidth-(position of x -marginLeft(offset))<15 (for right side)
+    //same for top and bottom
+
+    You can change 15 to any other numebr based on your requirement
+  */   
+  if (
+    imageWidth - (x - imageContainer.offsetLeft) < 15 ||
+    x - imageContainer.offsetLeft < 15 ||
+    imageHeight - (y - imageContainer.offsetTop) < 15 ||
+    y - imageContainer.offsetTop < 15
+  ) {
+    hideElement();
+  } else {
+    overlay.style.display = 'block';
+    mouseOverlay.style.display = 'inline-block';
+  }
+
+  /*
+    Formula used:
+
+    posX=((Xmouseposition-leftmargin)/imageWidth)*100
+    posY=((Ymouseposition-topmargin)/imageHeight)*100
+    toFixed is for limiting the number of decimals
+  */
+  var posX = ((x - imageContainer.offsetLeft) / imageWidth).toFixed(4) * 100;
+  var posY = ((y - imageContainer.offsetTop) / imageHeight).toFixed(4) * 100;
+
+  //set background position to above obtained values
+  overlay.style.backgroundPosition = posX + '%' + posY + '%';
+  //below lines move the overlay with cursor
+  mouseOverlay.style.top = y + 'px';
+  mouseOverlay.style.left = x + 'px';
+});
+
+  </script>
+</body>
+
+</html>
