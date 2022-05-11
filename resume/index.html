@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template</title>
+  <style>
+    /* initial styling */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .image-container {
+      width: 8em;
+      object-fit: contain;
+    }
+
+    img {
+      border-radius: 50%;
+      max-width: 100%;
+    }
+
+    .flex {
+      display: flex;
+      align-items: center;
+    }
+
+    /* This is flex for desktop and normal for phone */
+    .pc-flex {
+      display: flex;
+      align-items: center;
+    }
+
+    .flex-space {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .active {
+      /* box-shadow: 5px 5px 5px 1px #555; */
+      border: 1px solid #0892D0;
+    }
+
+    .buttonActive {
+      background-color: #000;
+      color: #FFF;
+    }
+
+    /* font sizes  required for the exact font size to appear in the dropdown value */
+    h1 {
+      font-size: 32px;
+    }
+
+    h3 {
+      font-size: 21px;
+    }
+
+    h5 {
+      font-size: 13px;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    /* Tools side */
+    .tools-container {
+      align-self: flex-start;
+      background: cadetblue;
+
+    }
+
+    /* Resume side */
+    .resume-container {
+      box-shadow: -1px 0 1px 0 #DDD;
+      width: 80%;
+    }
+
+    .resume {
+      padding: 5em 5em;
+      /* adjust height according to your needs(it is set to A4) */
+      width: 21cm;
+      height: 29.68cm;
+    }
+
+    .left {
+      /* margin-left: 5em; */
+      width: 30%;
+    }
+
+    .right {
+      /* border: 1px solid red; */
+      width: 70%;
+      margin-left: 3em;
+      /* margin-right: 5em; */
+    }
+
+    /* top */
+    .top {
+      /* margin-top: 5em; */
+      height: 30vh;
+    }
+
+    .email-container {
+      margin: 0 1em;
+    }
+
+    .icon {
+      margin: 0 0.2em;
+    }
+
+    .titles {
+      margin-top: 0.5em;
+    }
+
+    .user-input {
+      line-height: 1.77;
+      font-size: 13px;
+    }
+
+    .break {
+      background: #C8AA8C;
+      height: 3px;
+      margin: 1em 0;
+
+    }
+
+    .break,
+    .user-input,
+    .titles,
+    .heading {
+      font-family: Arial;
+      cursor: pointer;
+    }
+
+    span,
+    p {
+      font-size: 13px;
+    }
+
+    .resume-block {
+      align-items: flex-start;
+    }
+
+    /* Resume input part */
+
+    .title {
+      text-align: center;
+    }
+
+    .form_container {
+      width: 60%;
+      padding: 1em;
+      margin: 0 auto;
+    }
+
+    .resume_bulider {
+      flex-direction: column;
+    }
+
+    .resume-input,
+    .resume-input-button {
+      padding: 0.5em;
+      margin-bottom: 1em;
+    }
+
+    @media only screen and (max-width: 768px) {
+      .pc-flex {
+        /* display: flex; */
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Resume Inputs -->
+  <div class="resume_input_container">
+
+    <div class="form_container resume_bulider flex-space">
+      <h1>Enter Resume Details</h1>
+      <input type="text" id="username" name="username" class="resume-input" placeholder="Enter Your Name">
+      <input type="text" id="title" class="resume-input" placeholder="Enter Title (eg: Front-End developer)">
+      <input type="email" id="emailuser" placeholder="Email" class="resume-input">
+      <input type="text" id="contactnumberuser" placeholder="Contact number" class="resume-input">
+      <textarea id="about_user" placeholder="Summary" class="resume-input"></textarea>
+      <div id="education_input_container">
+        <div class="education_block flex-space">
+          <input type="text" class="education_college resume-input" placeholder="College/School Name">
+          <input type="text" class="education_year resume-input" placeholder="Passing Year">
+          <input type="text" class="education_degree resume-input" placeholder="Enter Degree">
+        </div>
+      </div>
+      <button id="education_add" class="resume-input-button">Add</button>
+      <div class="skill_container addinput">
+        <textarea class="Skill resume-input" rows="4" cols="50" id="skills-input"
+          placeholder="Enter Your Skills (comma seperated)"></textarea>
+      </div>
+      <div id="experience_input_container">
+        <div class="experience_block">
+          <input type="text" class="experience_company resume-input" placeholder="Company Name">
+          <div class="flex">
+            <input type="text" class="experience_start_year resume-input" placeholder="Start Year">
+            <input type="text" class="experience_end_year resume-input" placeholder="End Year">
+          </div>
+          <input type="text" class="experience_position resume-input" placeholder="Enter Position">
+        </div>
+      </div>
+      <button id="experience_add" class="resume-input-button">Add</button>
+      <!-- user links -->
+      <input type="url" class="sub_user_links resume-input" id="websiteLink" placeholder="Website Link">
+      <!-- Please download and copy the image in same folder of code and then enter the file location (html2pdf uses html2canvas for capturing image and then the image is converted to pdf but the profile image on resume would only be displayed if it is in same origin/folder) -->
+      <input type="url" class="sub_user_links resume-input" id="imageLink" placeholder="Image Link">
+      <button class="submit" id="submitInputs" class="resume-input-button">Submit</button>
+    </div>
+  </div>
+  <div class="pc-flex hide output_container">
+    <!-- tools -->
+    <div class="tools-container">
+      <label for="backgroundColor" id="backgroundColorLabel" class="hide">Background Color</label>
+      <input type="color" id="backgroundColor" class="hide">
+      <label for="fontColor">Font Color</label>
+      <input type="color" id="fontColor">
+
+      <select name="" id="fontSize">
+
+      </select>
+      <select name="" id="fontName">
+
+      </select>
+      <button id="bold" class="option-button format-button"><i class="fa-solid fa-bold"></i></button>
+      <button id="italic" class="option-button format-button"><i class="fa-solid fa-italic"></i></button>
+      <button id="underline" class="option-button format-button"><i class="fa-solid fa-underline"></i></button>
+      <button id="download">Save as PDF</button>
+    </div>
+    <!-- Resume part -->
+    <div class="resume-container">
+      <!-- actual resume -->
+      <div class="resume">
+        <!-- Image,name and  contact details -->
+        <div class="top flex">
+          <div class="left">
+            <div class="image-container">
+              <img id="userImage" src="./female_user.jpg" crossorigin="*" loading="lazy">
+            </div>
+          </div>
+          <div class="right">
+            <h1 id="user-name" class="heading"></h1>
+            <h3 id="headline" class="heading">Worker at World</h3>
+            <div class="contact-box">
+              <div class="contact flex">
+                <div class="phone-container flex">
+                  <span id="phone-icon" class="icon"><i class="fa-solid fa-phone"></i></span>
+                  <span id="phone" class="user-input">+123456789</span>
+                </div>
+                <div class="email-container">
+                  <span id="email-icon" class="icon"><i class="fa-solid fa-envelope"></i></span>
+                  <span id="email" class="user-input">johndoe@doemail.com</span>
+                </div>
+              </div>
+              <div class="extra-contact">
+                <div class="website-container">
+                  <span id="website-icon" class="icon"><i class="fa-solid fa-globe"></i></span>
+                  <span id="website" class="user-input">www.johndoe.com</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-container resume-block flex">
+          <div class="left">
+            <h5 class="titles">SUMMARY</h5>
+          </div>
+          <div class="right">
+            <div id="summary" class="user-input">Lorem ipsum dolor sit amet, consectetur
+              adipisicing elit. Corrupti excepturi quisquam
+              doloremque! </div>
+            <!-- Line Break -->
+            <div class="break"></div>
+          </div>
+
+        </div>
+
+        <!-- Experience -->
+        <div class="experience-container resume-block flex">
+          <div class="left">
+            <h5 class="titles">EXPERIENCE</h5>
+          </div>
+          <div class="right">
+            <div id="display-experience">
+
+            </div>
+            <!-- Line Break -->
+            <div class="break"></div>
+          </div>
+        </div>
+        <!-- Education -->
+        <div class="education-container resume-block flex">
+          <div class="left">
+            <h5 class="titles">EDUCATION</h5>
+          </div>
+          <div class="right">
+            <div id="display-education">
+
+            </div>
+            <!-- Line Break -->
+            <div class="break"></div>
+          </div>
+        </div>
+        <!-- Skills -->
+        <div class="skills-container resume-block flex">
+          <div class="left">
+            <h5 class="titles">SKILLS</h5>
+          </div>
+          <div class="right">
+            <div id="skills"></div>
+            <!-- Line Break -->
+            <div class="break"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- reference to html2pdf library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
+    integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="./script.js"></script>
+</body>
+
+</html>
