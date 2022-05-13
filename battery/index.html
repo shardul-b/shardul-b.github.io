@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battery</title>
+</head>
+
+<body>
+  <div id="batteryDetails">
+
+  </div>
+  <script>
+    // Not supported in FireFox and Apple Devices
+    //Doc: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getBattery
+    const batteryDetails = document.getElementById('batteryDetails');
+    window.onload = () => {
+      if (!navigator.getBattery) {
+        alert('Battery Status API is not supported in your browser');
+        return false;
+      }
+      displayInfo();
+    };
+    const displayInfo = () => {
+      navigator.getBattery().then((battery) => {
+        const { level, charging, chargingTime, dischargingTime } = battery;
+        batteryDetails.innerText += `
+          Battery Charge: ${Math.round(level * 100)}%
+          ${charging ? 'Charging' : 'Not Charging'}
+        `;
+        battery.addEventListener('chargingchange', () => {
+          batteryDetails.innerText += `
+           ${chargingTime / 60} Mins left for full charge
+          `;
+        });
+        battery.addEventListener('dischargingtimechange', () => {
+          batteryDetails.innerText += `
+            ${dischargingTime / 60} Minutes left
+         `;
+        });
+      });
+    };
+
+  </script>
+</body>
+
+</html>
