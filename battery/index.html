@@ -13,10 +13,11 @@
 
   </div>
   <script>
-    // Not supported in FireFox and Apple Devices
+    // Not supported in FireFox, IE and Apple Devices
     //Doc: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getBattery
     const batteryDetails = document.getElementById('batteryDetails');
     window.onload = () => {
+      //For browsers that don't support the Battery Status API
       if (!navigator.getBattery) {
         alert('Battery Status API is not supported in your browser');
         return false;
@@ -25,24 +26,26 @@
     };
     const displayInfo = () => {
       navigator.getBattery().then((battery) => {
+        /*
+          Level-Battery Percent
+          Charging-true/false(status)
+          chargingTime- Time required to charge (buggy)
+          dischargingTime-Time required for discharge (buggy)
+        */
         const { level, charging, chargingTime, dischargingTime } = battery;
         batteryDetails.innerText += `
           Battery Charge: ${Math.round(level * 100)}%
           ${charging ? 'Charging' : 'Not Charging'}
+          Time Left: ${dischargingTime / 60}
         `;
+        //For charging
         battery.addEventListener('chargingchange', () => {
           batteryDetails.innerText += `
-           ${chargingTime / 60} Mins left for full charge
+            ${chargingTime / 60} Mins left for full charge
           `;
-        });
-        battery.addEventListener('dischargingtimechange', () => {
-          batteryDetails.innerText += `
-            ${dischargingTime / 60} Minutes left
-         `;
         });
       });
     };
-
   </script>
 </body>
 
