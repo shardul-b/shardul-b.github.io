@@ -22,30 +22,58 @@
         alert('Battery Status API is not supported in your browser');
         return false;
       }
-      displayInfo();
     };
-    const displayInfo = () => {
-      navigator.getBattery().then((battery) => {
-        /*
-          Level-Battery Percent
-          Charging-true/false(status)
-          chargingTime- Time required to charge (buggy)
-          dischargingTime-Time required for discharge (buggy)
-        */
-        const { level, charging, chargingTime, dischargingTime } = battery;
-        batteryDetails.innerText += `
-          Battery Charge: ${Math.round(level * 100)}%
-          ${charging ? 'Charging' : 'Not Charging'}
-          Time Left: ${dischargingTime / 60}
-        `;
-        //For charging
-        battery.addEventListener('chargingchange', () => {
-          batteryDetails.innerText += `
-            ${chargingTime / 60} Mins left for full charge
-          `;
-        });
-      });
-    };
+    navigator.getBattery().then((battery) => {
+  /* Update all the battery information which is a combination of multiple functions */
+  function updateAllBatteryInfo() {
+    updateChargingInfo();
+    updateLevelInfo();
+    updateDischargingInfo();
+  }
+  updateAllBatteryInfo();
+
+  // When the charging status changes
+  battery.addEventListener('chargingchange', function () {
+    updateAllBatteryInfo();
+  });
+
+  // When the Battery Level Changes
+  battery.addEventListener('levelchange', function () {
+    updateAllBatteryInfo();
+  });
+
+  //  When the discharging Time Changes
+  battery.addEventListener('dischargingtimechange', function () {
+    updateAllBatteryInfo();
+  });
+
+  //   Updating the battery Level h
+  function updateLevelInfo() {
+    batteryDetails.innerText = `${parseInt(battery.level * 100)}%`;
+  }
+
+  function updateChargingInfo() {
+    if(battery.charging){
+      chargingInfo.style.display = 'block';
+      dischargingInfo.style.display = 'none';
+      chargingInfo.innerText = (battery.chargingTime / 60).toFixed(2);
+    }else{
+      chargingInfo.style.display = 'none';
+    }
+  }
+
+  //   update the Discharging Information
+  function updateDischargingInfo() {
+    const dischargeTime = (battery.dischargingTime / 60).parseInt;
+    if(dischargeTime){
+      dischargingInfo.innerText = `${parseInt(battery.dischargingTime / 60)} minutes`;
+      dischargingInfo.style.display = 'block';
+    }else{
+      dischargingInfo.style.display = 'none';
+    }
+  }
+});
+
   </script>
 </body>
 
