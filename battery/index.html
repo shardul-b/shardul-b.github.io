@@ -12,10 +12,18 @@
   <div id="batteryDetails">
 
   </div>
+  <div id="chargingInfo">
+
+  </div>
+  <div id="dischargingInfo">
+
+  </div>
   <script>
     // Not supported in FireFox, IE and Apple Devices
     //Doc: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getBattery
     const batteryDetails = document.getElementById('batteryDetails');
+    const chargingInfo = document.getElementById('chargingInfo');
+    const dischargingInfo = document.getElementById('dischargingInfo');
     window.onload = () => {
       //For browsers that don't support the Battery Status API
       if (!navigator.getBattery) {
