@@ -9,8 +9,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
 		integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<style>
-		* {
+    <style>
+        * {
   box-sizing: border-box;
   outline: none;
 }
@@ -156,7 +156,7 @@ body {
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768phttp://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4x) {
   .videoContainer,
   .controls_of_video {
     width: 100%;
@@ -180,8 +180,13 @@ body {
     height: 1.5em;
   }
 }
+@media only screen and (max-width: 768px) and (display-mode: fullscreen) {
+  .videoContainer {
+    margin-top: 50%;
+  }
+}
 
-	</style>
+    </style>
 </head>
 
 <body>
@@ -253,206 +258,201 @@ body {
 
 
 	<script type="text/javascript">
-		// video
-		let videoContainer = document.querySelector('#videoContainer');
-		let video = document.getElementById('video');
-		let container = document.querySelector('.container');
-		let rotateContainer = document.querySelector('.rotate-container');
-		// controls
-		let videoControls = document.querySelector('.controls_of_video');
-		// play and pause
-		let playButton = document.getElementById('playButton');
-		let pauseButton = document.getElementById('pauseButton');
-		// Volume
-		let volume = document.getElementById('volume');
-		let volume_range = document.getElementById('volume-range');
-		let volume_num = document.getElementById('volume_num');
-		let high = document.getElementById('high');
-		let low = document.getElementById('low');
-		let mute = document.getElementById('mute');
-		//Screen size
-		let sizeScreen = document.getElementById('sizeScreen');
-		let screen_compress = document.getElementById('screen_compress');
-		let screen_expand = document.getElementById('screen_expand');
-		// progress
-		const currentProgress = document.getElementById('currentProgress');
-		const currentTimeRef = document.getElementById('current-time');
-		const maxDuration = document.getElementById('max-duration');
-		const progressBar = document.getElementById('progress-bar');
+        // video
+        let videoContainer = document.querySelector('#videoContainer');
+        let video = document.getElementById('video');
+        let container = document.querySelector('.container');
+        let rotateContainer = document.querySelector('.rotate-container');
+        // controls
+        let videoControls = document.querySelector('.controls_of_video');
+        // play and pause
+        let playButton = document.getElementById('playButton');
+        let pauseButton = document.getElementById('pauseButton');
+        // Volume
+        let volume = document.getElementById('volume');
+        let volume_range = document.getElementById('volume-range');
+        let volume_num = document.getElementById('volume_num');
+        let high = document.getElementById('high');
+        let low = document.getElementById('low');
+        let mute = document.getElementById('mute');
+        //Screen size
+        let sizeScreen = document.getElementById('sizeScreen');
+        let screen_compress = document.getElementById('screen_compress');
+        let screen_expand = document.getElementById('screen_expand');
+        // progress
+        const currentProgress = document.getElementById('currentProgress');
+        const currentTimeRef = document.getElementById('current-time');
+        const maxDuration = document.getElementById('max-duration');
+        const progressBar = document.getElementById('progress-bar');
 
-		//events object
-		let events = {
-		  mouse: {
-		    click: 'click',
-		  },
-		  touch: {
-		    click: 'touchstart',
-		  },
-		};
-		let deviceType = '';
+        //events object
+        let events = {
+        mouse: {
+            click: 'click',
+        },
+        touch: {
+            click: 'touchstart',
+        },
+        };
+        let deviceType = '';
 
-		//Detect touch device
-		const is_touch_device = () => {
-		  try {
-		    //We try to create TouchEvent (it would fail for desktops and throw error)
-		    document.createEvent('TouchEvent');
-		    deviceType = 'touch';
-		    return true;
-		  } catch (e) {
-		    deviceType = 'mouse';
-		    return false;
-		  }
-		};
+        //Detect touch device
+        const is_touch_device = () => {
+        try {
+            //We try to create TouchEvent (it would fail for desktops and throw error)
+            document.createEvent('TouchEvent');
+            deviceType = 'touch';
+            return true;
+        } catch (e) {
+            deviceType = 'mouse';
+            return false;
+        }
+        };
 
-		// play and pause button
-		playButton.addEventListener('click', () => {
-		  video.play();
-		  pauseButton.classList.remove('hide');
-		  playButton.classList.add('hide');
-		});
+        // play and pause button
+        playButton.addEventListener('click', () => {
+        video.play();
+        pauseButton.classList.remove('hide');
+        playButton.classList.add('hide');
+        });
 
-		pauseButton.addEventListener(
-		  'click',
-		  (pauseVideo = () => {
-		    video.pause();
-		    pauseButton.classList.add('hide');
-		    playButton.classList.remove('hide');
-		  })
-		);
-		//mute the video
-		const muter = () => {
-		  mute.classList.remove('hide');
-		  high.classList.add('hide');
-		  low.classList.add('hide');
-		  video.volume = 0;
-		  volume_num.innerHTML = 0;
-		  volume_range.value = 0;
-		};
-		//when user click on high and low volume then mute the audio
-		high.addEventListener('click', muter);
-		low.addEventListener('click', muter);
-		// for volume
-		volume_range.addEventListener('input', () => {
-		  //for converting % to decimal values since video.volume would accept decimals only
-		  let volumeValue = volume_range.value / 100;
-		  video.volume = volumeValue;
-		  volume_num.innerHTML = volume_range.value;
-		  //mute icon, low volume, high volume icons
-		  if (volume_range.value == 0) {
-		    muter();
-		  } else if (volume_range.value < 50) {
-		    low.classList.remove('hide');
-		    high.classList.add('hide');
-		    mute.classList.add('hide');
-		  } else if (volume_range.value > 50) {
-		    high.classList.remove('hide');
-		    mute.classList.add('hide');
-		    low.classList.add('hide');
-		  }
-		});
+        pauseButton.addEventListener(
+        'click',
+        (pauseVideo = () => {
+            video.pause();
+            pauseButton.classList.add('hide');
+            playButton.classList.remove('hide');
+        })
+        );
+        //mute the video
+        const muter = () => {
+        mute.classList.remove('hide');
+        high.classList.add('hide');
+        low.classList.add('hide');
+        video.volume = 0;
+        volume_num.innerHTML = 0;
+        volume_range.value = 0;
+        };
+        //when user click on high and low volume then mute the audio
+        high.addEventListener('click', muter);
+        low.addEventListener('click', muter);
+        // for volume
+        volume_range.addEventListener('input', () => {
+        //for converting % to decimal values since video.volume would accept decimals only
+        let volumeValue = volume_range.value / 100;
+        video.volume = volumeValue;
+        volume_num.innerHTML = volume_range.value;
+        //mute icon, low volume, high volume icons
+        if (volume_range.value == 0) {
+            muter();
+        } else if (volume_range.value < 50) {
+            low.classList.remove('hide');
+            high.classList.add('hide');
+            mute.classList.add('hide');
+        } else if (volume_range.value > 50) {
+            high.classList.remove('hide');
+            mute.classList.add('hide');
+            low.classList.add('hide');
+        }
+        });
 
-		//Screen size
-		screen_expand.addEventListener('click', () => {
-		  screen_compress.classList.remove('hide');
-		  screen_expand.classList.add('hide');
-		  //fullscreen
-		  container.requestFullscreen();
-		  if (is_touch_device) {
-		    let screenOrientation =
-		      screen.orientation || screen.mozOrientation || screen.msOrientation;
-		    if (screenOrientation.type == 'portrait-primary') {
-		      rotateContainer.classList.remove('hide');
-		      pauseVideo();
-		    } else {
-		      rotateContainer.classList.add('hide');
-		    }
-		    // console.log(screenOrientation);
-		    // screenOrientation
-		    //   .lock('landscape-primary')
-		    //   .then(() => {
-		    //     alert('Yo');
-		    //   })
-		    //   .catch((error) => console.log(error));
-		  }
-		});
-		//if user presses escape the browser fire 'fullscreenchange' event
-		document.addEventListener('fullscreenchange', exitHandler);
-		document.addEventListener('webkitfullscreenchange', exitHandler);
-		document.addEventListener('mozfullscreenchange', exitHandler);
-		document.addEventListener('MSFullscreenChange', exitHandler);
+        //Screen size
+        screen_expand.addEventListener('click', () => {
+        screen_compress.classList.remove('hide');
+        screen_expand.classList.add('hide');
+        //fullscreen
+        container.requestFullscreen();
+        if (is_touch_device) {
+            let screenOrientation =
+            screen.orientation || screen.mozOrientation || screen.msOrientation;
+            if (screenOrientation.type == 'portrait-primary') {
+            //update styling for fullscreen
+            pauseVideo();
+            rotateContainer.classList.remove('hide');
+            const myTimeout = setTimeout(() => {
+                rotateContainer.classList.add('hide');
+            }, 3000);
+            }
+        }
+        });
+        //if user presses escape the browser fire 'fullscreenchange' event
+        document.addEventListener('fullscreenchange', exitHandler);
+        document.addEventListener('webkitfullscreenchange', exitHandler);
+        document.addEventListener('mozfullscreenchange', exitHandler);
+        document.addEventListener('MSFullscreenChange', exitHandler);
 
-		function exitHandler() {
-		  //if fullscreen is closed
-		  if (
-		    !document.fullscreenElement &&
-		    !document.webkitIsFullScreen &&
-		    !document.mozFullScreen &&
-		    !document.msFullscreenElement
-		  ) {
-		    normalScreen();
-		  }
-		}
-		//back to normal screen
-		screen_compress.addEventListener(
-		  'click',
-		  (normalScreen = () => {
-		    screen_compress.classList.add('hide');
-		    screen_expand.classList.remove('hide');
-		    if (document.fullscreenElement) {
-		      if (document.exitFullscreen) {
-			document.exitFullscreen();
-		      } else if (document.mozCancelFullScreen) {
-			document.mozCancelFullScreen();
-		      } else if (document.webkitExitFullscreen) {
-			document.webkitExitFullscreen();
-		      }
-		    }
-		  })
-		);
+        function exitHandler() {
+        //if fullscreen is closed
+        if (
+            !document.fullscreenElement &&
+            !document.webkitIsFullScreen &&
+            !document.mozFullScreen &&
+            !document.msFullscreenElement
+        ) {
+            normalScreen();
+        }
+        }
+        //back to normal screen
+        screen_compress.addEventListener(
+        'click',
+        (normalScreen = () => {
+            screen_compress.classList.add('hide');
+            screen_expand.classList.remove('hide');
+            if (document.fullscreenElement) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+            }
+        })
+        );
 
-		//Format time(convert ms to seconds, minutes and add 0 if less than 10)
-		const timeFormatter = (timeInput) => {
-		  let minute = Math.floor(timeInput / 60);
-		  minute = minute < 10 ? '0' + minute : minute;
-		  let second = Math.floor(timeInput % 60);
-		  second = second < 10 ? '0' + second : second;
-		  return `${minute}:${second}`;
-		};
-		//update progress every second
-		setInterval(() => {
-		  currentTimeRef.innerHTML = timeFormatter(video.currentTime);
-		  currentProgress.style.width =
-		    (video.currentTime / video.duration.toFixed(3)) * 100 + '%';
-		}, 1000);
-		//update timer
-		video.addEventListener('timeupdate', () => {
-		  currentTimeRef.innerText = timeFormatter(video.currentTime);
-		});
+        //Format time(convert ms to seconds, minutes and add 0 if less than 10)
+        const timeFormatter = (timeInput) => {
+        let minute = Math.floor(timeInput / 60);
+        minute = minute < 10 ? '0' + minute : minute;
+        let second = Math.floor(timeInput % 60);
+        second = second < 10 ? '0' + second : second;
+        return `${minute}:${second}`;
+        };
+        //update progress every second
+        setInterval(() => {
+        currentTimeRef.innerHTML = timeFormatter(video.currentTime);
+        currentProgress.style.width =
+            (video.currentTime / video.duration.toFixed(3)) * 100 + '%';
+        }, 1000);
+        //update timer
+        video.addEventListener('timeupdate', () => {
+        currentTimeRef.innerText = timeFormatter(video.currentTime);
+        });
 
-		//if user clicks on progress bar
-		is_touch_device();
-		progressBar.addEventListener(events[deviceType].click, (event) => {
-		  //start of progressBar
-		  let coordStart = progressBar.getBoundingClientRect().left;
-		  //mouse click position
-		  let coordEnd = !is_touch_device() ? event.clientX : event.touches[0].clientX;
-		  let progress = (coordEnd - coordStart) / progressBar.offsetWidth;
-		  //set width to progress
-		  currentProgress.style.width = progress * 100 + '%';
-		  //set time
-		  video.currentTime = progress * video.duration;
-		  //play
-		  video.play();
-		  pauseButton.classList.remove('hide');
-		  playButton.classList.add('hide');
-		});
+        //if user clicks on progress bar
+        is_touch_device();
+        progressBar.addEventListener(events[deviceType].click, (event) => {
+        //start of progressBar
+        let coordStart = progressBar.getBoundingClientRect().left;
+        //mouse click position
+        let coordEnd = !is_touch_device() ? event.clientX : event.touches[0].clientX;
+        let progress = (coordEnd - coordStart) / progressBar.offsetWidth;
+        //set width to progress
+        currentProgress.style.width = progress * 100 + '%';
+        //set time
+        video.currentTime = progress * video.duration;
+        //play
+        video.play();
+        pauseButton.classList.remove('hide');
+        playButton.classList.add('hide');
+        });
 
-		window.onload = () => {
-		  //display duration
-		  maxDuration.innerText = timeFormatter(video.duration);
-		};
+        window.onload = () => {
+        //display duration
+        maxDuration.innerText = timeFormatter(video.duration);
+        };
 
-	</script>
+    </script>
 </body>
 
 </html>
