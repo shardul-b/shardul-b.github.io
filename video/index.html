@@ -1,458 +1,563 @@
+<!-- Created By Mitali -->
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Custom Video Player</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-		integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <head>
+    <title>Custom Video Player</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
-        * {
-  box-sizing: border-box;
-  outline: none;
-}
-body {
-  margin: 0;
-}
-.flex {
-  display: flex;
-}
-.flex-space {
-  display: flex;
-  justify-content: space-between;
-}
-.container {
-  padding: 1em 0;
-}
-#video {
-  width: 100%;
-}
-.rotate-container {
-  top: 0;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#rotate-icon {
-  /* top: 40%; */
-  /* left: 40%; */
-  /*width: 40%; */
-  display: flex;
-  flex-direction: column;
-  color: #ddd;
-  text-align: center;
-}
-.hide {
-  display: none;
-}
-.videoContainer {
-  width: 60%;
-  margin: 0 auto;
-}
-.controls_of_video {
-  margin: 0 auto;
-  padding: 0 0.5em;
-  background-color: rgba(128, 128, 128, 0.3);
-  width: 60%;
-}
-.progress-container {
-  align-items: center;
-  /*border: 1px solid blue;*/
-}
-.video_controls_system {
-  flex-direction: row;
-  /*border: 1px solid green ;*/
-  align-items: center;
-}
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        outline: none;
+        color: #fff;
+        font-family: "Roboto Mono", monospace;
+      }
+      body {
+        background-color: #2887e3;
+      }
+      .flex {
+        display: flex;
+      }
+      .flex-space {
+        display: flex;
+        justify-content: space-between;
+      }
+      .container {
+        padding: 1em 0;
+      }
+      #my-video {
+        width: 100%;
+      }
+      .rotate-container {
+        top: 0;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #rotate-icon {
+        display: flex;
+        flex-direction: column;
+        color: #ddd;
+        text-align: center;
+      }
+      .hide {
+        display: none;
+      }
+      .video-container {
+        width: 60%;
+        margin: 0 auto;
+      }
+      .controls {
+        margin: -5px auto;
+        padding: 0.5em;
+        background-color: #232227;
+        width: 60%;
+      }
+      .progress-container {
+        align-items: center;
+      }
+      .video-controls {
+        flex-direction: row;
+        align-items: center;
+      }
 
-/*progress bar*/
-#progress-bar {
-  position: relative;
-  width: 85%;
-  height: 5px;
-  background-color: #888;
-  margin: 1em 0;
-  vertical-align: 2px;
-  border-radius: 3px;
-  cursor: pointer;
-}
+      /*progress bar*/
+      #progress-bar {
+        position: relative;
+        width: 75%;
+        height: 5px;
+        background-color: #000;
+        margin: 1em 0;
+        vertical-align: 2px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .song-timer {
+        font-size: 0.8em;
+        width: 25%;
+        text-align: right;
+      }
+      #current-progress {
+        position: absolute;
+        left: 0;
+        display: inline-block;
+        height: 5px;
+        width: 50%;
+        background: #2887e3;
+        border-radius: 5px;
+      }
+      .playback {
+        position: relative;
+      }
+      /*control system*/
+      .control-btn,
+      #screen-expand,
+      #screen-compress {
+        width: 3em;
+        height: 3em;
+        outline: none;
+        border: none;
+        background-color: transparent;
+      }
+      #size-screen {
+        margin-left: auto;
+      }
+      .volume {
+        align-items: center;
+        margin-left: 0.6em;
+      }
+      #volume-range {
+        position: relative;
+        margin: 0 0.5em;
+        cursor: pointer;
+        height: 5px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        height: 5px;
+        background-color: #000000;
+        border-radius: 5px;
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 10px;
+        width: 10px;
+        background-color: #2887e3;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+      }
+      .fa-solid {
+        font-size: 1.1rem;
+      }
 
-#currentProgress {
-  position: absolute;
-  left: 0;
-  display: inline-block;
-  height: 5px;
-  width: 50%;
-  background: #1434a4;
-}
+      .container-2 {
+        width: 10%;
+        min-width: 70px;
+        align-items: center;
+      }
+      #playback-speed-btn {
+        position: relative;
+        background: transparent;
+        border: 1px solid #ffffff;
+        color: #ffffff;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        padding: 0.2em 0.25em;
+        cursor: pointer;
+      }
 
-#currentProgress::after {
-  content: '';
-  position: absolute;
-  left: 100%;
-  top: -1px;
-  width: 3px;
-  height: 7px;
-  background-color: #000;
-}
-/*control system*/
-.contol_Button,
-#screen_expand,
-#screen_compress {
-  width: 3em;
-  height: 3em;
-  outline: none;
-  border: none;
-  background-color: transparent;
-}
-#sizeScreen {
-  margin-left: auto;
-}
-.volume {
-  align-items: center;
-  margin-left: 0.6em;
-  /* border: 1px solid #1434a4; */
-}
-#volume-range {
-  margin: 0 0.5em;
-  cursor: pointer;
-  height: 5px;
-}
-.fa-solid {
-  font-size: 1.1rem;
-}
+      /* Dropup content (Hidden by Default) */
+      .playback-options {
+        position: absolute;
+        bottom: 0;
+        background-color: #000;
+        min-width: 5em;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
 
-@media all and (display-mode: fullscreen) {
-  .container {
-    padding: 0;
-  }
-  .videoContainer {
-    width: 100%;
-    margin: 0;
-  }
-  .controls_of_video {
-    /* background-color: rgba(200, 200, 200, 0.3); */
-    position: absolute;
-    display: block;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 2;
-    color: #ddd;
-  }
-  #progress-bar {
-    width: 90%;
-    background-color: #555;
-  }
-  .fa-solid {
-    color: #ddd;
-  }
-}
+      /* Links inside the dropup */
+      .playback-options button {
+        color: #fff;
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+        width: 100%;
+        background-color: transparent;
+        padding: 1em;
+        text-decoration: none;
+        display: block;
+      }
 
-@media only screen and (max-width: 768phttp://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4x) {
-  .videoContainer,
-  .controls_of_video {
-    width: 100%;
-  }
-  #progress-bar {
-    width: 75%;
-  }
-  span {
-    display: inline;
-  }
-  .song-timer {
-    font-size: 0.8rem;
-  }
-  .fa-solid {
-    font-size: 1rem;
-  }
-  .contol_Button,
-  #screen_expand,
-  #screen_compress {
-    width: 2em;
-    height: 1.5em;
-  }
-}
-@media only screen and (max-width: 768px) and (display-mode: fullscreen) {
-  .videoContainer {
-    margin-top: 50%;
-  }
-}
+      /* Show the dropup menu on hover */
+      /* .playblack:hover .playback-options {
+        display: block;
+        } */
 
+      @media all and (display-mode: fullscreen) {
+        .container {
+          padding: 0;
+        }
+        .video-container {
+          width: 100%;
+          margin: 0;
+        }
+        .controls {
+          position: absolute;
+          display: block;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          z-index: 2;
+        }
+        #progress-bar {
+          width: 80%;
+        }
+        .song-timer {
+          width: 20%;
+          font-size: 1.2em;
+        }
+        .fa-solid {
+          color: #ddd;
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        .video-container,
+        .controls {
+          width: 100%;
+        }
+
+        span {
+          display: inline;
+        }
+        #progress-bar {
+          width: 60%;
+        }
+        .song-timer {
+          width: 40%;
+          font-size: 0.9em;
+        }
+        .fa-solid {
+          font-size: 1rem;
+        }
+        .control-btn,
+        #screen-expand,
+        #screen-compress {
+          width: 2em;
+          height: 1.5em;
+        }
+      }
+      @media only screen and (max-width: 768px) and (display-mode: fullscreen) {
+        .video-container {
+          margin-top: 50%;
+        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <div class="container">
+      <div class="rotate-container hide">
+        <div id="rotate-icon">
+          <i class="fa-solid fa-rotate-left"></i>
+          <p>Rotate for a better experience</p>
+        </div>
+      </div>
+      <div class="video-container" id="video-container">
+        <video
+          id="my-video"
+          src="https://dl.dropbox.com/s/l90y72zm97ayzhx/my%20video.mp4?raw=1"
+          type="video/mp4"
+          preload="metadata"
+        >
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="controls" id="controls">
+        <div class="progress-container flex-space">
+          <div id="progress-bar">
+            <div id="current-progress"></div>
+          </div>
+          <div class="song-timer">
+            <span id="current-time">00:00</span>
+            <span> / </span>
+            <span id="max-duration">00:00</span>
+          </div>
+        </div>
 
-	<div class="container">
-		<div class="rotate-container hide">
+        <div id="video-controls" class="video-controls flex-space">
+          <div class="container-1 flex">
+            <div>
+              <!-- play video -->
+              <button id="play-btn" class="control-btn">
+                <i class="fa-solid fa-play"></i>
+              </button>
+              <!-- pause the video  -->
+              <button id="pauseButton" class="control-btn hide">
+                <i class="fa-solid fa-pause"></i>
+              </button>
+            </div>
+            <!-- volume of video -->
+            <div id="volume" class="volume flex">
+              <span id="high"><i class="fa-solid fa-volume-high"></i></span>
 
-			<div id="rotate-icon">
-				<i class="fa-solid fa-rotate-left"></i>
-				<p>Rotate for a better experience</p>
-			</div>
+              <span class="hide" id="low"
+                ><i class="fa-solid fa-volume-low"></i
+              ></span>
 
-		</div>
-		<div class="videoContainer" id="videoContainer">
-			<video id="video" src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
-				<!-- <source src="" > -->
-				Your browser does not support the video tag.
-			</video>
+              <span class="hide" id="mute"
+                ><i class="fa-solid fa-volume-xmark"></i
+              ></span>
 
-		</div>
-		<div class="controls_of_video" id="controls">
-			<div class="progress-container flex-space">
-				<div id="progress-bar">
-					<div id="currentProgress"></div>
-				</div>
-				<div class="song-timer">
-					<span id="current-time">00:00</span>
-					<span> / </span>
-					<span id="max-duration">00:00</span>
-				</div>
-			</div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                id="volume-range"
+                oninput="slider()"
+              />
 
-			<div id="videoControls" class="video_controls_system flex">
-				<div class="play_pause_button" id="">
-					<!-- play video -->
-					<button id="playButton" class="contol_Button">
-						<i class="fa-solid fa-play"></i>
-					</button>
-					<!-- pause the video  -->
-					<button id="pauseButton" class="contol_Button hide">
-						<i class="fa-solid fa-pause"></i>
-					</button>
-				</div>
-				<!-- volume of video -->
-				<div id="volume" class="volume flex">
-					<span class="" id="high"><i class="fa-solid fa-volume-high"></i></span>
+              <span id="volume-num">50</span>
+            </div>
+          </div>
+          <div class="container-2 flex-space">
+            <div class="playback">
+              <button id="playback-speed-btn">1x</button>
+              <div class="playback-options hide">
+                <button onclick="setPlayback(0.5)">0.5</button>
+                <button onclick="setPlayback(1.0)">Normal(1)</button>
+                <button onclick="setPlayback(2.0)">2</button>
+              </div>
+            </div>
+            <!-- screen size -->
+            <div id="size-screen">
+              <button id="screen-expand">
+                <i class="fa-solid fa-expand"></i>
+              </button>
+              <button id="screen-compress" class="hide">
+                <i class="fa-solid fa-compress"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-					<span class="hide" id="low"><i class="fa-solid fa-volume-low"></i></span>
+    <script type="text/javascript">
+      let container = document.querySelector(".container");
+      let myVideo = document.getElementById("my-video");
+      let rotateContainer = document.querySelector(".rotate-container");
+      let videoControls = document.querySelector(".controls");
+      let playButton = document.getElementById("play-btn");
+      let pauseButton = document.getElementById("pauseButton");
+      let volume = document.getElementById("volume");
+      let volumeRange = document.getElementById("volume-range");
+      let volumeNum = document.getElementById("volume-num");
+      let high = document.getElementById("high");
+      let low = document.getElementById("low");
+      let mute = document.getElementById("mute");
+      let sizeScreen = document.getElementById("size-screen");
+      let screenCompress = document.getElementById("screen-compress");
+      let screenExpand = document.getElementById("screen-expand");
+      const currentProgress = document.getElementById("current-progress");
+      const currentTimeRef = document.getElementById("current-time");
+      const maxDuration = document.getElementById("max-duration");
+      const progressBar = document.getElementById("progress-bar");
+      const playbackSpeedButton = document.getElementById("playback-speed-btn");
+      const playbackContainer = document.querySelector(".playback");
+      const playbackSpeedOptions = document.querySelector(".playback-options");
 
-					<span class="hide" id="mute"><i class="fa-solid fa-volume-xmark"></i></span>
-
-					<input type="range" min="0" max="100" value="50" id="volume-range">
-
-					<span id="volume_num">50</span>
-				</div>
-				<!-- screen size -->
-				<div id="sizeScreen">
-					<button id="screen_expand" class="screen_size">
-						<i class="fa-solid fa-expand"></i>
-					</button>
-					<button id="screen_compress" class="screen_size hide">
-						<i class="fa-solid fa-compress"></i>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-
-	<script type="text/javascript">
-        // video
-        let videoContainer = document.querySelector('#videoContainer');
-        let video = document.getElementById('video');
-        let container = document.querySelector('.container');
-        let rotateContainer = document.querySelector('.rotate-container');
-        // controls
-        let videoControls = document.querySelector('.controls_of_video');
-        // play and pause
-        let playButton = document.getElementById('playButton');
-        let pauseButton = document.getElementById('pauseButton');
-        // Volume
-        let volume = document.getElementById('volume');
-        let volume_range = document.getElementById('volume-range');
-        let volume_num = document.getElementById('volume_num');
-        let high = document.getElementById('high');
-        let low = document.getElementById('low');
-        let mute = document.getElementById('mute');
-        //Screen size
-        let sizeScreen = document.getElementById('sizeScreen');
-        let screen_compress = document.getElementById('screen_compress');
-        let screen_expand = document.getElementById('screen_expand');
-        // progress
-        const currentProgress = document.getElementById('currentProgress');
-        const currentTimeRef = document.getElementById('current-time');
-        const maxDuration = document.getElementById('max-duration');
-        const progressBar = document.getElementById('progress-bar');
-
-        //events object
-        let events = {
+      function slider() {
+        valPercent = (volumeRange.value / volumeRange.max) * 100;
+        volumeRange.style.background = `linear-gradient(to right, #2887E3 ${valPercent}%, #000000 ${valPercent}%)`;
+      }
+      //events object
+      let events = {
         mouse: {
-            click: 'click',
+          click: "click",
         },
         touch: {
-            click: 'touchstart',
+          click: "touchstart",
         },
-        };
-        let deviceType = '';
+      };
+      let deviceType = "";
 
-        //Detect touch device
-        const is_touch_device = () => {
+      //Detect touch device
+      const is_touch_device = () => {
         try {
-            //We try to create TouchEvent (it would fail for desktops and throw error)
-            document.createEvent('TouchEvent');
-            deviceType = 'touch';
-            return true;
+          //We try to create TouchEvent (it would fail for desktops and throw error)
+          document.createEvent("TouchEvent");
+          deviceType = "touch";
+          return true;
         } catch (e) {
-            deviceType = 'mouse';
-            return false;
+          deviceType = "mouse";
+          return false;
         }
-        };
+      };
 
-        // play and pause button
-        playButton.addEventListener('click', () => {
-        video.play();
-        pauseButton.classList.remove('hide');
-        playButton.classList.add('hide');
-        });
+      // play and pause button
+      playButton.addEventListener("click", () => {
+        myVideo.play();
+        pauseButton.classList.remove("hide");
+        playButton.classList.add("hide");
+      });
 
-        pauseButton.addEventListener(
-        'click',
+      pauseButton.addEventListener(
+        "click",
         (pauseVideo = () => {
-            video.pause();
-            pauseButton.classList.add('hide');
-            playButton.classList.remove('hide');
+          myVideo.pause();
+          pauseButton.classList.add("hide");
+          playButton.classList.remove("hide");
         })
-        );
-        //mute the video
-        const muter = () => {
-        mute.classList.remove('hide');
-        high.classList.add('hide');
-        low.classList.add('hide');
-        video.volume = 0;
-        volume_num.innerHTML = 0;
-        volume_range.value = 0;
-        };
-        //when user click on high and low volume then mute the audio
-        high.addEventListener('click', muter);
-        low.addEventListener('click', muter);
-        // for volume
-        volume_range.addEventListener('input', () => {
-        //for converting % to decimal values since video.volume would accept decimals only
-        let volumeValue = volume_range.value / 100;
-        video.volume = volumeValue;
-        volume_num.innerHTML = volume_range.value;
-        //mute icon, low volume, high volume icons
-        if (volume_range.value == 0) {
-            muter();
-        } else if (volume_range.value < 50) {
-            low.classList.remove('hide');
-            high.classList.add('hide');
-            mute.classList.add('hide');
-        } else if (volume_range.value > 50) {
-            high.classList.remove('hide');
-            mute.classList.add('hide');
-            low.classList.add('hide');
-        }
-        });
+      );
 
-        //Screen size
-        screen_expand.addEventListener('click', () => {
-        screen_compress.classList.remove('hide');
-        screen_expand.classList.add('hide');
+      // playback
+      playbackContainer.addEventListener("click", () => {
+        playbackSpeedOptions.classList.remove("hide");
+      });
+      //if user clicks outside or on the option
+      window.addEventListener("click", (e) => {
+        if (!playbackContainer.contains(e.target)) {
+          playbackSpeedOptions.classList.add("hide");
+        } else if (playbackSpeedOptions.contains(e.target)) {
+          playbackSpeedOptions.classList.add("hide");
+        }
+      });
+
+      //playback speed
+      const setPlayback = (value) => {
+        playbackSpeedButton.innerText = value + "x";
+        myVideo.playbackRate = value;
+        // playbackSpeedOptions.classList.add('hide');
+      };
+
+      //mute the video
+      const muter = () => {
+        mute.classList.remove("hide");
+        high.classList.add("hide");
+        low.classList.add("hide");
+        myVideo.volume = 0;
+        volumeNum.innerHTML = 0;
+        volumeRange.value = 0;
+      };
+      //when user click on high and low volume then mute the audio
+      high.addEventListener("click", muter);
+      low.addEventListener("click", muter);
+      // for volume
+      volumeRange.addEventListener("input", () => {
+        //for converting % to decimal values since video.volume would accept decimals only
+        let volumeValue = volumeRange.value / 100;
+        myVideo.volume = volumeValue;
+        volumeNum.innerHTML = volumeRange.value;
+        //mute icon, low volume, high volume icons
+        if (volumeRange.value == 0) {
+          muter();
+        } else if (volumeRange.value < 50) {
+          low.classList.remove("hide");
+          high.classList.add("hide");
+          mute.classList.add("hide");
+        } else if (volumeRange.value > 50) {
+          high.classList.remove("hide");
+          mute.classList.add("hide");
+          low.classList.add("hide");
+        }
+      });
+
+      //Screen size
+      screenExpand.addEventListener("click", () => {
+        screenCompress.classList.remove("hide");
+        screenExpand.classList.add("hide");
         //fullscreen
         container.requestFullscreen();
         if (is_touch_device) {
-            let screenOrientation =
+          let screenOrientation =
             screen.orientation || screen.mozOrientation || screen.msOrientation;
-            if (screenOrientation.type == 'portrait-primary') {
+          if (screenOrientation.type == "portrait-primary") {
             //update styling for fullscreen
             pauseVideo();
-            rotateContainer.classList.remove('hide');
+            rotateContainer.classList.remove("hide");
             const myTimeout = setTimeout(() => {
-                rotateContainer.classList.add('hide');
+              rotateContainer.classList.add("hide");
             }, 3000);
-            }
+          }
         }
-        });
-        //if user presses escape the browser fire 'fullscreenchange' event
-        document.addEventListener('fullscreenchange', exitHandler);
-        document.addEventListener('webkitfullscreenchange', exitHandler);
-        document.addEventListener('mozfullscreenchange', exitHandler);
-        document.addEventListener('MSFullscreenChange', exitHandler);
+      });
+      //if user presses escape the browser fire 'fullscreenchange' event
+      document.addEventListener("fullscreenchange", exitHandler);
+      document.addEventListener("webkitfullscreenchange", exitHandler);
+      document.addEventListener("mozfullscreenchange", exitHandler);
+      document.addEventListener("MSFullscreenChange", exitHandler);
 
-        function exitHandler() {
+      function exitHandler() {
         //if fullscreen is closed
         if (
-            !document.fullscreenElement &&
-            !document.webkitIsFullScreen &&
-            !document.mozFullScreen &&
-            !document.msFullscreenElement
+          !document.fullscreenElement &&
+          !document.webkitIsFullScreen &&
+          !document.mozFullScreen &&
+          !document.msFullscreenElement
         ) {
-            normalScreen();
+          normalScreen();
         }
-        }
-        //back to normal screen
-        screen_compress.addEventListener(
-        'click',
+      }
+      //back to normal screen
+      screenCompress.addEventListener(
+        "click",
         (normalScreen = () => {
-            screen_compress.classList.add('hide');
-            screen_expand.classList.remove('hide');
-            if (document.fullscreenElement) {
+          screenCompress.classList.add("hide");
+          screenExpand.classList.remove("hide");
+          if (document.fullscreenElement) {
             if (document.exitFullscreen) {
-                document.exitFullscreen();
+              document.exitFullscreen();
             } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
+              document.mozCancelFullScreen();
             } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
+              document.webkitExitFullscreen();
             }
-            }
+          }
         })
-        );
+      );
 
-        //Format time(convert ms to seconds, minutes and add 0 if less than 10)
-        const timeFormatter = (timeInput) => {
+      //Format time(convert ms to seconds, minutes and add 0 if less than 10)
+      const timeFormatter = (timeInput) => {
         let minute = Math.floor(timeInput / 60);
-        minute = minute < 10 ? '0' + minute : minute;
+        minute = minute < 10 ? "0" + minute : minute;
         let second = Math.floor(timeInput % 60);
-        second = second < 10 ? '0' + second : second;
+        second = second < 10 ? "0" + second : second;
         return `${minute}:${second}`;
-        };
-        //update progress every second
-        setInterval(() => {
-        currentTimeRef.innerHTML = timeFormatter(video.currentTime);
+      };
+      //update progress every second
+      setInterval(() => {
+        currentTimeRef.innerHTML = timeFormatter(myVideo.currentTime);
         currentProgress.style.width =
-            (video.currentTime / video.duration.toFixed(3)) * 100 + '%';
-        }, 1000);
-        //update timer
-        video.addEventListener('timeupdate', () => {
-        currentTimeRef.innerText = timeFormatter(video.currentTime);
-        });
+          (myVideo.currentTime / myVideo.duration.toFixed(3)) * 100 + "%";
+      }, 1000);
+      //update timer
+      myVideo.addEventListener("timeupdate", () => {
+        currentTimeRef.innerText = timeFormatter(myVideo.currentTime);
+      });
 
-        //if user clicks on progress bar
-        is_touch_device();
-        progressBar.addEventListener(events[deviceType].click, (event) => {
+      //if user clicks on progress bar
+      is_touch_device();
+      progressBar.addEventListener(events[deviceType].click, (event) => {
         //start of progressBar
         let coordStart = progressBar.getBoundingClientRect().left;
         //mouse click position
-        let coordEnd = !is_touch_device() ? event.clientX : event.touches[0].clientX;
+        let coordEnd = !is_touch_device()
+          ? event.clientX
+          : event.touches[0].clientX;
         let progress = (coordEnd - coordStart) / progressBar.offsetWidth;
         //set width to progress
-        currentProgress.style.width = progress * 100 + '%';
+        currentProgress.style.width = progress * 100 + "%";
         //set time
-        video.currentTime = progress * video.duration;
+        myVideo.currentTime = progress * myVideo.duration;
         //play
-        video.play();
-        pauseButton.classList.remove('hide');
-        playButton.classList.add('hide');
-        });
+        myVideo.play();
+        pauseButton.classList.remove("hide");
+        playButton.classList.add("hide");
+      });
 
-        window.onload = () => {
+      window.onload = () => {
         //display duration
-        maxDuration.innerText = timeFormatter(video.duration);
+        myVideo.onloadedmetadata = () => {
+          maxDuration.innerText = timeFormatter(myVideo.duration);
         };
-
+        slider();
+      };
     </script>
-</body>
-
+  </body>
 </html>
