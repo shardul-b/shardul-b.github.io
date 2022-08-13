@@ -43,6 +43,18 @@
       background-color: #555;
     }
 
+    .controls-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: cadetblue;
+      width: 100%;
+      height: 100%;
+      top: 0;
+    }
+
     .hide {
       display: none;
     }
@@ -52,208 +64,165 @@
 <body>
   <div class="container">
     <div class="draggable-objects">
-
-      <div class="draggable-image" draggable="true">
-        <img src="images/belgium.png" alt="" id="belgium">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/bhutan.png" alt="" id="bhutan">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/brazil.png" alt="" id="brazil">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/china.png" alt="" id="china">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/cuba.png" alt="" id="cuba">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/ecuador.png" alt="" id="ecuador">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/georgia.png" alt="" id="georgia">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/germany.png" alt="" id="germany">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/hong-kong.png" alt="" id="hong-kong">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/india.png" alt="" id="india">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/iran.png" alt="" id="iran">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/myanmar.png" alt="" id="myanmar">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/norway.png" alt="" id="norway">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/spain.png" alt="" id="spain">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/sri-lanka.png" alt="" id="sri-lanka">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/sweden.png" alt="" id="sweden">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/switzerland.png" alt="" id="switzerland">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/united-states.png" alt="" id="united-states">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/uruguay.png" alt="" id="uruguay">
-      </div>
-      <div class="draggable-image" draggable="true">
-        <img src="images/wales.png" alt="" id="wales">
-      </div>
     </div>
     <div class="drop-points">
-      <div>
-        <div class="countries" id="belgium">
-          Belgium
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="bhutan">
-          Bhutan
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="brazil">
-          Brazil
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="china">
-          China
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="cuba">
-          Cuba
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="ecuador">
-          Ecuador
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="georgia">
-          Georgia
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="germany">
-          Germany
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="hong-kong">
-          Hong Kong
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="india">
-          India
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="iran">
-          Iran
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="myanmar">
-          Myanmar
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="norway">
-          Norway
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="spain">
-          Spain
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="sri-lanka">
-          Sri Lanka
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="sweden">
-          Sweden
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="switzerland">
-          Switzerland
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="united-states">
-          United States
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="uruguay">
-          Uruguay
-        </div>
-      </div>
-      <div>
-        <div class="countries" id="wales">
-          Wales
-        </div>
-      </div>
+
     </div>
 
   </div>
+  <div class="controls-container">
+    <p id="result"></p>
+    <button id="start">Start Game</button>
+  </div>
   <script>
-    const draggableObjects = document.querySelectorAll('.draggable-image');
-    const dropPoints = document.querySelectorAll('.countries');
+    let draggableObjects;
+let dropPoints;
+const startButton = document.getElementById('start');
+const result = document.getElementById('result');
+const controls = document.querySelector('.controls-container');
+const dragContainer = document.querySelector('.draggable-objects');
+const dropContainer = document.querySelector('.drop-points');
+const data = [
+  'belgium',
+  'bhutan',
+  'brazil',
+  'china',
+  'cuba',
+  'ecuador',
+  'georgia',
+  'germany',
+  'hong-kong',
+  'india',
+  'iran',
+  'myanmar',
+  'norway',
+  'spain',
+  'sri-lanka',
+  'sweden',
+  'switzerland',
+  'united-states',
+  'uruguay',
+  'wales',
+];
+let deviceType = '';
+let initialX = 0,
+  initialY = 0;
+let moveElement = false;
+//Detect touch device
+const is_touch_device = () => {
+  try {
+    //We try to create TouchEvent (it would fail for desktops and throw error)
+    document.createEvent('TouchEvent');
+    deviceType = 'touch';
+    return true;
+  } catch (e) {
+    deviceType = 'mouse';
+    return false;
+  }
+};
+let count = 0;
+//random value from Array
+const randomValueGenerator = () =>
+  data[Math.floor(Math.random() * data.length)];
 
-draggableObjects.forEach((element) => {
-  element.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text', e.target.id);
-  });
-});
+//display win
+const stopGame = () => {
+  controls.classList.remove('hide');
+  startButton.classList.remove('hide');
+};
 
-dropPoints.forEach((element) => {
-  element.addEventListener('dragover', dragOver);
-  element.addEventListener('drop', drop); 
-});
-
-
-function dragOver(event) {
-  event.preventDefault();
+function dragStart(e) {
+  //for touch screen
+  if (is_touch_device()) {
+    initialX = e.touches[0].clientX;
+    initialY = e.touches[0].clientY;
+    // start movement
+    moveElement = true;
+  }
+  e.dataTransfer.setData('text', e.target.id);
 }
 
-function drop(event) {
-  event.preventDefault();
-  const draggedElementData = event.dataTransfer.getData('text');   
-  const droppableElementData = event.target.getAttribute('id');
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+function drop(e) {
+  e.preventDefault();
+  const draggedElementData = e.dataTransfer.getData('text');
+  const droppableElementData = e.target.getAttribute('id');
   if (draggedElementData === droppableElementData) {
     const draggedElement = document.getElementById(draggedElementData);
-    event.target.classList.add('dropped');
+    e.target.classList.add('dropped');
     draggedElement.classList.add('hide');
     draggedElement.setAttribute('draggable', 'false');
-    event.target.innerHTML = ``;
-    event.target.insertAdjacentHTML(
+    e.target.innerHTML = ``;
+    e.target.insertAdjacentHTML(
       'afterbegin',
       `<img src="images/${draggedElementData}.png" alt="">`
     );
+    count += 1;
+    // Win
+    if (count == 3) {
+      result.innerText = `
+        You Won!
+      `;
+      stopGame();
+    }
   }
 }
+//creates flags and countries
+const creator = () => {
+  dragContainer.innerHTML = '';
+  dropContainer.innerHTML = '';
+  let randomData = [];
+  //for storing random values in array
+  for (let i = 1; i <= 3; i++) {
+    let randomValue = randomValueGenerator();
+    if (!randomData.includes(randomValue)) {
+      randomData.push(randomValue);
+    } else {
+      i -= 1;
+    }
+  }
+  for (let i of randomData) {
+    const flagDiv = document.createElement('div');
+    flagDiv.classList.add('draggable-image');
+    flagDiv.setAttribute('draggable', true);
+    // flagDiv.setAttribute('id', i);
+    flagDiv.innerHTML = `
+      <img src="images/${i}.png" alt=""  id="${i}">
+    `;
+    dragContainer.appendChild(flagDiv);
+    const countryDiv = document.createElement('div');
+    countryDiv.innerHTML = `
+    <div class='countries' id='${i}'>
+      ${i.charAt(0).toUpperCase() + i.slice(1).replace('-', ' ')}
+    </div>
+  `;
+    dropContainer.appendChild(countryDiv);
+  }
+};
+startButton.addEventListener(
+  'click',
+  (startGame = async () => {
+    controls.classList.add('hide');
+    startButton.classList.add('hide');
+
+    await creator();
+    count = 0;
+    dropPoints = document.querySelectorAll('.countries');
+    draggableObjects = document.querySelectorAll('.draggable-image');
+    draggableObjects.forEach((element) => {
+      element.addEventListener('dragstart', dragStart);
+      element.addEventListener('touchstart', dragStart);
+    });
+    dropPoints.forEach((element) => {
+      element.addEventListener('dragover', dragOver);
+      element.addEventListener('drop', drop); 
+    });
+  })
+);
 
   </script>
 </body>
