@@ -131,8 +131,9 @@ const stopGame = () => {
   startButton.classList.remove('hide');
 };
 
+// Drag and Drop Functions
+
 function dragStart(e) {
-  //for touch screen
   if (is_touch_device()) {
     initialX = e.touches[0].clientX;
     initialY = e.touches[0].clientY;
@@ -142,18 +143,43 @@ function dragStart(e) {
   e.dataTransfer.setData('text', e.target.id);
 }
 
+//Events fired on the drop target
+
+function dragEnter(e) {
+  if (is_touch_device) {
+  }
+  // console.log('enter');
+  // if (!e.target.classList.contains('dropped')) {
+  // e.target.classList.add('droppable-hover');
+  // }
+}
 
 function dragOver(e) {
   e.preventDefault();
+  // console.log('Over');
+  // if (!e.target.classList.contains('dropped')) {
+  // e.preDefault(); // Pre default to allow drop
+  // }
+}
+
+function dragLeave(e) {
+  //   if (!e.target.classList.contains('dropped')) {
+  //     e.target.classList.remove('droppable-hover');
+  //   }
 }
 
 function drop(e) {
   e.preventDefault();
+  // e.target.classList.remove('droppable-hover');
+  if (is_touch_device()) {
+    moveElement = false;
+  }
   const draggedElementData = e.dataTransfer.getData('text');
   const droppableElementData = e.target.getAttribute('id');
   if (draggedElementData === droppableElementData) {
     const draggedElement = document.getElementById(draggedElementData);
     e.target.classList.add('dropped');
+    // draggableElement.classList.add('dragged');
     draggedElement.classList.add('hide');
     draggedElement.setAttribute('draggable', 'false');
     e.target.innerHTML = ``;
@@ -191,7 +217,7 @@ const creator = () => {
     flagDiv.setAttribute('draggable', true);
     // flagDiv.setAttribute('id', i);
     flagDiv.innerHTML = `
-      <img src="images/${i}.png" alt=""  id="${i}">
+      <img src="./images/${i}.png" alt=""  id="${i}">
     `;
     dragContainer.appendChild(flagDiv);
     const countryDiv = document.createElement('div');
@@ -216,10 +242,28 @@ startButton.addEventListener(
     draggableObjects.forEach((element) => {
       element.addEventListener('dragstart', dragStart);
       element.addEventListener('touchstart', dragStart);
+      if (is_touch_device()) {
+        element.addEventListener('touchmove', (e) => {
+          if (moveElement) {
+            e.preventDefault();
+            let newX = e.touches[0].clientX;
+            let newY = e.touches[0].clientY;
+            dragElement.style.top =
+              dragElement.offsetTop - (initialY - newY) + 'px';
+            dragElement.style.left =
+              dragElement.offsetLeft - (initialX - newX) + 'px';
+            initialX = newX;
+            initialY = newY;
+          }
+        });
+      }
     });
     dropPoints.forEach((element) => {
+      // element.addEventListener('dragenter', dragEnter);
       element.addEventListener('dragover', dragOver);
-      element.addEventListener('drop', drop); 
+      // element.addEventListener('dragleave', dragLeave);
+      element.addEventListener('drop', drop);
+      element.addEventListener('touchend', drop);
     });
   })
 );
