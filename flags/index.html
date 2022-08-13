@@ -107,6 +107,7 @@ const data = [
 let deviceType = '';
 let initialX = 0,
   initialY = 0;
+let currentElement = '';
 let moveElement = false;
 //Detect touch device
 const is_touch_device = () => {
@@ -139,8 +140,10 @@ function dragStart(e) {
     initialY = e.touches[0].clientY;
     // start movement
     moveElement = true;
+    currentElement = e.target;
+  } else {
+    e.dataTransfer.setData('text', e.target.id);
   }
-  e.dataTransfer.setData('text', e.target.id);
 }
 
 //Events fired on the drop target
@@ -171,10 +174,14 @@ function dragLeave(e) {
 function drop(e) {
   e.preventDefault();
   // e.target.classList.remove('droppable-hover');
+  let draggedElementData = e.target.getAttribute('id');
   if (is_touch_device()) {
     moveElement = false;
+    draggedElementData = currentElement.id;
+  } else {
+    draggedElementData = e.dataTransfer.getData('text');
   }
-  const draggedElementData = e.dataTransfer.getData('text');
+
   const droppableElementData = e.target.getAttribute('id');
   if (draggedElementData === droppableElementData) {
     const draggedElement = document.getElementById(draggedElementData);
@@ -215,6 +222,9 @@ const creator = () => {
     const flagDiv = document.createElement('div');
     flagDiv.classList.add('draggable-image');
     flagDiv.setAttribute('draggable', true);
+    if (is_touch_device()) {
+      flagDiv.style.position = 'absolute';
+    }
     // flagDiv.setAttribute('id', i);
     flagDiv.innerHTML = `
       <img src="./images/${i}.png" alt=""  id="${i}">
@@ -232,6 +242,7 @@ const creator = () => {
 startButton.addEventListener(
   'click',
   (startGame = async () => {
+    currentElement = '';
     controls.classList.add('hide');
     startButton.classList.add('hide');
 
@@ -248,10 +259,10 @@ startButton.addEventListener(
             e.preventDefault();
             let newX = e.touches[0].clientX;
             let newY = e.touches[0].clientY;
-            dragElement.style.top =
-              dragElement.offsetTop - (initialY - newY) + 'px';
-            dragElement.style.left =
-              dragElement.offsetLeft - (initialX - newX) + 'px';
+            draggableObjects.style.top =
+              draggableObjects.offsetTop - (initialY - newY) + 'px';
+            draggableObjects.style.left =
+              draggableObjects.offsetLeft - (initialX - newX) + 'px';
             initialX = newX;
             initialY = newY;
           }
@@ -263,10 +274,12 @@ startButton.addEventListener(
       element.addEventListener('dragover', dragOver);
       // element.addEventListener('dragleave', dragLeave);
       element.addEventListener('drop', drop);
+      //for touch screen
       element.addEventListener('touchend', drop);
     });
   })
 );
+
 
   </script>
 </body>
