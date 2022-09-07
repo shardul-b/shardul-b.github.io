@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Local Storage To Do List</title>
+    <!--Google Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <!--Font Awesome CDN-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    <!--Stylesheet-->
+    <style>
+      *,
+      *:before,
+      *:after{
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
+      }
+      body{
+          height: 100vh;
+          background: linear-gradient(
+              135deg,
+              #8052ec,
+              #d161ff
+          );
+      }
+      .container{
+          width: 40%;
+          min-width: 450px;
+          position: absolute;
+          transform: translate(-50%,-50%);
+          top: 50%;
+          left: 50%;
+          padding: 30px 40px;
+      }
+      #newtask{
+          position: relative;
+          background-color: #ffffff;
+          padding: 30px 20px;
+          border-radius: 5px;
+          box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+      }
+      #newtask input{
+          width: 70%;
+          width: 70%;
+          height: 45px;
+          font-family: 'Poppins',sans-serif;
+          font-size: 15px;
+          border: 2px solid #d1d3d4;
+          padding: 12px;
+          color: #111111;
+          font-weight: 500;
+          position: relative;
+          border-radius: 5px;
+      }
+      #newtask input:focus{
+          outline: none;
+          border-color: #8052ec;
+      }
+
+      #newtask button{
+          position: relative;
+          float: right;
+          width: 20%;
+          height: 45px;
+          border-radius: 5px;
+          font-family: 'Poppins',sans-serif;
+          font-weight: 500;
+          font-size: 16px;
+          background-color: #8052ec;
+          border: none;
+          color: #ffffff;
+          cursor: pointer;
+          outline: none;
+      }
+      #tasks{
+          background-color: #ffffff;
+          padding: 30px 20px;
+          margin-top: 60px;
+          border-radius: 10px;
+          box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+          width: 100%;
+          position: relative;
+      }
+      .task{
+          background-color: #ffffff;
+          height: 50px;
+          padding: 5px 10px;
+          margin-top: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 2px solid #d1d3d4;
+          cursor: pointer;
+      }
+      .task span{
+          font-family: 'Poppins',sans-serif;
+          font-size: 15px;
+          font-weight: 400;
+      }
+      .task button{
+          background-color: #8052ec;
+          color: #ffffff;
+          height: 100%;
+          width: 40px;
+          border-radius: 5px;
+          border: none;
+          cursor: pointer;
+          outline: none;
+      }
+      .completed{
+          text-decoration: line-through;
+      }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="newtask">
+            <input type="text" placeholder="Task to be done..">
+            <button id="push">Add</button>
+        </div>
+        <div id="tasks"></div>
+    </div>
+    <!--Script-->
+    <script>
+      const newTaskInput = document.querySelector('#newtask input');
+      const tasksDiv = document.querySelector('#tasks');
+      let delete_tasks, edit_tasks, tasks;
+      let updateNote = '';
+      let count;
+      //remove task from local storage
+      const removeTask = (task_value) => {
+        localStorage.removeItem(task_value);
+        displayTasks();
+      };
+      //add tasks to local storage
+      const updateStorage = (index, task_value, completed) => {
+        localStorage.setItem(`${index}_${task_value}`, completed);
+        displayTasks();
+      };
+      //disables edit buttons
+      const disableButtons = (bool) => {
+        let editButtons = document.getElementsByClassName('edit');
+        Array.from(editButtons).forEach((element) => {
+          element.disabled = bool;
+        });
+      };
+
+      const displayTasks = () => {
+        //clear the tasks
+        tasksDiv.innerHTML = '';
+        //fetch all the keys in localstorage(localstorage stores in the format key:value)
+        let tasks = Object.keys(localStorage);
+        tasks = tasks.sort();
+        for (let key of tasks) {
+          let classValue = '';
+          //get all the values
+          let value = localStorage.getItem(key);
+          
+
+          //key would be 'index_task' eg: '0_Hello'
+          let taskInnerDiv = document.createElement('div');
+          taskInnerDiv.classList.add('task');
+          taskInnerDiv.setAttribute('id', key);
+          taskInnerDiv.innerHTML = `<span id="taskname">${key.split('_')[1]}</span>`;
+          //localstorage would store boolean as string so we parse it to get boolean back
+          if (!JSON.parse(value)) {
+            //when task is not completed display the edit button
+            let editButton = document.createElement('button');
+            editButton.classList.add('edit');
+            editButton.innerHTML = `<i class="fas fa-pencil-alt"></i>`;
+            taskInnerDiv.appendChild(editButton);
+          } else {
+            taskInnerDiv.classList.add('completed');
+          }
+
+          taskInnerDiv.innerHTML += `<button class="delete">
+          <i class="far fa-trash-alt"></i>
+          </button>`;
+          tasksDiv.appendChild(taskInnerDiv);
+        }
+        //task completed
+        tasks = document.querySelectorAll('.task');
+        tasks.forEach((element, index) => {
+          element.onclick = () => {
+            //local storage update (count,task,completed)
+            updateStorage(element.id.split('_')[0], element.innerText, true);
+          };
+        });
+        //edit tasks
+        edit_tasks = document.getElementsByClassName('edit');
+        Array.from(edit_tasks).forEach((element, index) => {
+          element.addEventListener('click', (e) => {
+            //stop propogation to outer elements(if removed, whem we click  delete eventually the click will move to parent)
+            e.stopPropagation();
+            //disable other edit buttons when one task is being edited
+            disableButtons(true);
+            //update input value and remove div
+            let parent = element.parentElement;
+            newTaskInput.value = parent.querySelector('#taskname').innerText;
+            //set updateNote to the task that is being edited
+            updateNote = parent.id;
+            //remove task
+            parent.remove();
+          });
+        });
+        //delete task
+        delete_tasks = document.getElementsByClassName('delete');
+        Array.from(delete_tasks).forEach((element, index) => {
+          element.addEventListener('click', (e) => {
+            e.stopPropagation();
+            //delete from local storage and remove div
+            let parent = element.parentElement;
+            removeTask(parent.id);
+            parent.remove();
+            count -= 1;
+          });
+        });
+      };
+      //new task
+      document.querySelector('#push').addEventListener('click', () => {
+        //enable the edit buttons
+        disableButtons(false);
+        if (newTaskInput.value.length == 0) {
+          alert('Please Enter a Task');
+        } else {
+          //store locally and display from local storage
+          if (updateNote == '') {
+            //new task
+            updateStorage(count, newTaskInput.value, false);
+          } else {
+            //update task
+            let existingCount = updateNote.split('_')[0]; //existing index
+            removeTask(updateNote);
+            updateStorage(existingCount, newTaskInput.value, false);
+            updateNote = '';
+          }
+          count += 1;
+          newTaskInput.value = '';
+        }
+      });
+      //initial stuff
+      window.onload = () => {
+        updateNote = '';
+        count = Object.keys(localStorage).length;
+        displayTasks();
+      };
+
+    </script>
+</body>
+
+</html>
