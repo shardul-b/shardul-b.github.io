@@ -148,7 +148,7 @@
       };
 
       const displayTasks = () => {
-        if (count > 0) {
+        if (Object.keys(localStorage).length > 0) {
            tasksDiv.style.display = 'inline-block';
         } else {
            tasksDiv.style.display = 'none';
