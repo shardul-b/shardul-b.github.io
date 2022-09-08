@@ -148,6 +148,11 @@
       };
 
       const displayTasks = () => {
+        if (count > 0) {
+           tasksDiv.style.display = 'inline-block';
+        } else {
+           tasksDiv.style.display = 'none';
+        }
         //clear the tasks
         tasksDiv.innerHTML = '';
         //fetch all the keys in localstorage(localstorage stores in the format key:value)
