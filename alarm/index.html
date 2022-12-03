@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Name</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .hide {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="timerDisplay">00 : 00 </div>
+    <div class="container">
+      <select id="hourDrowdown">
+        <option value="" selected disabled hidden>Hour</option>
+      </select>
+      <select id="minuteDrowdown">
+        <option value="" selected disabled hidden>Minute</option>
+      </select>
+      <select id="periodDrowdown">
+        <option value="" selected disabled hidden>AM/PM</option>
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+      <button id="set">Set Alarm</button>
+      <button id="stop" class="hide">Clear Alarm</button>
+    </div>
+    <script>
+        // let [seconds, minutes, hours] = [0, 0, 0, 0];
+let period = 'AM';
+let timerRef = document.querySelector('.timerDisplay');
+const hourDropdown = document.getElementById('hourDrowdown');
+const minuteDropdown = document.getElementById('minuteDrowdown');
+const periodDropdown = document.getElementById('periodDrowdown');
+const setAlarm = document.getElementById('set');
+const stopAlarm = document.getElementById('stop');
+let [alarmHour, alarmMinute, alarmPeriod] = [0, 0, 0];
+let alarmSound = new Audio('./alarm.mp3');
+let alarmSet = false;
+//Display time
+function displayTimer() {
+  let date = new Date();
+  //current hours,minutes.seconds
+  let [hours, minutes, seconds] = [
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+  ];
+  //for converting 24 hours to 12 hours format
+
+  if (hours >= 12) {
+    hours -= 12;
+    period = 'PM';
+  } else if (hours == 0) {
+    hours = 12;
+  }
+  //display time(with zeroes appended)
+  timerRef.innerHTML = `${appendZero(hours)} : ${appendZero(
+    minutes
+  )} : ${appendZero(seconds)} ${period}`;
+  //alarm
+  if (alarmSet) {
+    if (
+      `${alarmHour}:${alarmMinute}${alarmPeriod}` ===
+      `${hours}:${minutes}${period}`
+    ) {
+      alarmSound.play();
+      alarmSound.loop = true;
+    }
+  }
+  }
+  //append zeroes for single digit
+  const appendZero = (value) => (value < 10 ? '0' + value : value);
+  //Create options for dropdown
+  const createOptions = () => {
+  for (let i = 0; i < 60; i++) {
+    minuteDropdown.innerHTML += `<option value="${i}">${appendZero(
+      i
+    )}</option>`;
+    if (i >= 1 && i <= 12) {
+      hourDropdown.innerHTML += `<option value="${i}">${appendZero(
+        i
+      )}</option>`;
+    }
+  }
+  };
+  //set alarm
+  setAlarm.addEventListener('click', () => {
+  //If user doesn't select any values
+  if (
+    hourDropdown.value == '' ||
+    minuteDropdown.value == '' ||
+    periodDropdown.value == ''
+  ) {
+    alert('Please select valid values');
+    return false;
+  }
+  alarmSet = true;
+  stopAlarm.classList.remove('hide');
+  setAlarm.classList.add('hide');
+  [alarmHour, alarmMinute, alarmPeriod] = [
+    hourDropdown.value,
+    minuteDropdown.value,
+    periodDropdown.value,
+  ];
+  });
+  //Stop alarm
+  stopAlarm.addEventListener('click', () => {
+  alarmTime = '';
+  alarmSound.pause();
+  alarmSet = false;
+  hourDropdown.value = '';
+  minuteDropdown.value = '';
+  periodDropdown.value = '';
+  stopAlarm.classList.add('hide');
+  setAlarm.classList.remove('hide');
+  });
+  window.onload = () => {
+  setInterval(displayTimer);
+  createOptions();
+  };
+
+    </script>
+  </body>
+</html>
