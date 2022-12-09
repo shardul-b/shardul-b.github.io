@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Code Name</title>
+    <title>Alarm Clock</title>
     <style>
       * {
         box-sizing: border-box;
@@ -24,14 +24,10 @@
     <div class="timerDisplay">00 : 00 : 00</div>
     <div class="container">
       <div class="hourContainer">
-        <input type="text" id="hourInput" value="00" disabled />
-        <button class="hourIncrement">+</button>
-        <button class="hourDecrement">-</button>
+        <input type="number" id="hourInput" placeholder="00" />
       </div>
       <div class="minuteContainer">
-        <input type="text" id="minuteInput" value="00" disabled />
-        <button class="minuteIncrement">+</button>
-        <button class="minuteDecrement">-</button>
+        <input type="number" id="minuteInput" placeholder="00" />
       </div>
       <div class="activeAlarms"></div>
       <button id="set">Add Alarm</button>
@@ -81,6 +77,7 @@
           appendZero(date.getMinutes()),
           appendZero(date.getSeconds()),
         ];
+
         //display time(with zeroes appended)
         timerRef.innerHTML = `${hours} : ${minutes} : ${seconds}`;
         //alarm
@@ -92,37 +89,21 @@
             }
           }
         });
-        // }
       }
-      //Increment and Decrement buttons
-      hourIncrement.addEventListener('click', () => {
-        initialHour += 1;
-        if (initialHour >= 23) {
-          initialHour = 0;
+      const inputCheck = (inputValue) => {
+        inputValue = parseInt(inputValue);
+        if (inputValue < 10) {
+          inputValue = appendZero(inputValue);
         }
-        hourInput.value = `${appendZero(initialHour)}`;
+        return inputValue;
+      };
+      hourInput.addEventListener('input', () => {
+        hourInput.value = inputCheck(hourInput.value);
       });
-      minuteIncrement.addEventListener('click', () => {
-        initialMinute += 1;
-        if (initialMinute >= 59) {
-          initialMinute = 0;
-        }
-        minuteInput.value = `${appendZero(initialMinute)}`;
+      minuteInput.addEventListener('input', () => {
+        minuteInput.value = inputCheck(minuteInput.value);
       });
-      hourDecrement.addEventListener('click', () => {
-        initialHour -= 1;
-        if (initialHour <= 0) {
-          initialHour = 23;
-        }
-        hourInput.value = `${appendZero(initialHour)}`;
-      });
-      minuteDecrement.addEventListener('click', () => {
-        initialMinute -= 1;
-        if (initialMinute <= 0) {
-          initialMinute = 59;
-        }
-        minuteInput.value = `${appendZero(initialMinute)}`;
-      });
+     
       //create alarm div
       const createAlarm = (alarmObj) => {
         //keys from object (destructure)
@@ -158,7 +139,12 @@
       //set alarm
       setAlarm.addEventListener('click', () => {
         //If user doesn't select any values
-        if (hourInput.value == '' || minuteInput.value == '') {
+        if (
+          hourInput.value.trim() == '' ||
+          minuteInput.value.trim() == '' ||
+          hourInput.value > 23 ||
+          minuteInput.value > 59
+        ) {
           alert('Please select valid values');
           return false;
         }
@@ -175,6 +161,8 @@
         //array of alarms(for multiple alarms)
         alarmsArray.push(alarmObj);
         createAlarm(alarmObj);
+        hourInput.value = appendZero(initialHour);
+        minuteInput.value = appendZero(initialMinute);
       });
 
       //start Alarm
@@ -202,7 +190,6 @@
 
       //delete alarm
       const deleteAlarm = (e) => {
-        // e.target.remove();
         let searchId = e.target.parentElement.getAttribute('data-id');
         let [exists, obj, index] = searchObject('id', searchId);
         if (exists) {
@@ -220,7 +207,6 @@
         hourInput.value = appendZero(initialHour);
         minuteInput.value = appendZero(initialMinute);
       };
-
     </script>
   </body>
 </html>
