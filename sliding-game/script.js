@@ -1,5 +1,8 @@
 const moves = document.getElementById('moves');
 const container = document.querySelector('.container');
+const startButton = document.getElementById('start-button');
+const coverScreen = document.querySelector('.cover-screen');
+const result = document.getElementById('result');
 let currentElement = '';
 let movesCount,
   imagesArr = [];
@@ -16,18 +19,20 @@ const is_touch_device = () => {
 };
 //random number for image
 const randomNumber = () => Math.floor(Math.random() * 8) + 1;
-
+//get row and column value from data-position
 const getCoords = (element) => {
   const [row, col] = element.getAttribute('data-position').split('_');
   return [parseInt(row), parseInt(col)];
 };
-//row1,col1 are image co-ordinates while row2 and col2 are blank space co-ordinates
+//row1,col1 are image co-ordinates while row2 and col2 are blank image co-ordinates
 const checkAdjacent = (row1, row2, col1, col2) => {
   if (row1 == row2) {
+    //left/right
     if (col2 == col1 - 1 || col2 == col1 + 1) {
       return true;
     }
   } else if (col1 == col2) {
+    //up/down
     if (row2 == row1 - 1 || row2 == row1 + 1) {
       return true;
     }
@@ -63,6 +68,8 @@ const gridGenerator = () => {
     }
   }
 };
+
+//start dragging
 const dragStart = (e) => {
   initialX = is_touch_device() ? e.touches[0].clientX : e.clientX;
   initialY = is_touch_device() ? e.touches[0].clientY : e.clientY;
@@ -92,37 +99,51 @@ const drop = (e) => {
       //swap
       currentElement.remove();
       targetElement.remove();
+      //get image index(to be used later for manipulating array)
       let currentIndex = parseInt(currentElement.getAttribute('data-index'));
       let targetIndex = parseInt(targetElement.getAttribute('data-index'));
+      //swap index
       currentElement.setAttribute('data-index', targetIndex);
       targetElement.setAttribute('data-index', currentIndex);
+      //swap images
       currentParent.appendChild(targetElement);
-
       targetParent.appendChild(currentElement);
+      //array swaps
       let currentArrIndex = imagesArr.indexOf(currentIndex);
       let targetArrIndex = imagesArr.indexOf(targetIndex);
       [imagesArr[currentArrIndex], imagesArr[targetArrIndex]] = [
         imagesArr[targetArrIndex],
         imagesArr[currentArrIndex],
       ];
+      //win condition
       if (imagesArr.join('') == '123456789') {
-        alert('You Won');
-      } else {
-        console.log(imagesArr.join(''));
+        setTimeout(() => {
+          //When game ends display the cover screen again
+          coverScreen.classList.remove('hide');
+          container.classList.add('hide');
+          result.innerText = `Total Moves: ${movesCount}`;
+          startButton.innerText = 'Restart Game';
+        }, 1000);
       }
+      //increment an display moves
       movesCount += 1;
       moves.innerText = `Moves: ${movesCount}`;
     }
-    // alert('YES');
-  } else {
-    console.log('No');
   }
-
 };
-window.onload = () => {
+//Start button click should display the container
+startButton.addEventListener('click', () => {
+  container.classList.remove('hide');
+  coverScreen.classList.add('hide');
+  container.innerHTML = '';
   imagesArr = [];
   randomImages();
   gridGenerator();
   movesCount = 0;
   moves.innerText = `Moves: ${movesCount}`;
+});
+//display start screen first
+window.onload = () => {
+  coverScreen.classList.remove('hide');
+  container.classList.add('hide');
 };
