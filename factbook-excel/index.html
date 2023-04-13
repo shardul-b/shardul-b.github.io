@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./country_codes.js"></script>
+    <title>Country Data to XLSX - 1.0.1</title>
+    <!-- <script src="./all_results.js"></script> -->
+    <!--version 0.19.2 -->
+    <script
+      lang="javascript"
+      src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"
+    ></script>
+    <style>
+      button {
+        padding: 0.5em;
+      }
+      a {
+        /* text-decoration: none; */
+        color: #000;
+      }
+      .region-container {
+        margin: 0.5em 0;
+        display: flex;
+      }
+      .region-button,
+      .all-data,
+      .country-button {
+        border: 1px solid #000;
+        background-color: transparent;
+        margin: 0 0.5em;
+        border-radius: 5px;
+      }
+      .region-button:hover,
+      .all-data:hover,
+      .country-button:hover {
+        background-color: #000;
+        color: #fff;
+        cursor: pointer;
+      }
+      .hide {
+        display: none;
+      }
+      .version {
+        position: relative;
+        left: 0.5em;
+      }
+      @media only screen and (max-width: 768px) {
+        .region-container {
+          margin: 0.5em 0;
+          display: block;
+        }
+        .region-button {
+          margin: 0.5em 0;
+        }
+      }
+    </style>
+    <title>World Data</title>
+  </head>
+
+  <body>
+    <h1>Country Data Extractor</h1>
+    <h4>
+      Source:
+      <a href="https://github.com/factbook/factbook.json">CIA Factbook JSON</a>
+    </h4>
+    <p>Simply click on any button to get data in an Excel sheet.</p>
+
+    <div class="container">
+      <button class="all-data">All Countries</button>
+    </div>
+    <div class="region-container"></div>
+    <div class="country-container"></div>
+    <p class="version">v- 1.0.1</p>
+  </body>
+  <script src="./script.js"></script>
+</html>
