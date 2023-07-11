@@ -5,7 +5,7 @@ function openCvReady() {
 }
 const imageApply = () => {
   const imgElement = document.createElement('img');
-  imgElement.src = './images.jpeg';
+  imgElement.src = 'https://github.com/shardul-b/coding-artist-tasks/blob/opencv-reel-code/Codes/image_to_cartoon/images.jpeg';
   imgElement.onload = function () {
     //load an image
     const mat = cv.imread(imgElement);
