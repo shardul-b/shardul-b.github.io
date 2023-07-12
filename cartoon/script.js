@@ -5,6 +5,7 @@ function openCvReady() {
 }
 const imageApply = () => {
   const imgElement = document.createElement('img');
+  imgElement.crossOrigin = "Anonymous";
   imgElement.src = './images.jpeg';
   imgElement.onload = function () {
     //load an image
