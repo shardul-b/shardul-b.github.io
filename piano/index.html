@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piano</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        align-items: center;
+      }
+
+      .piano-container {
+        height: 290px;
+        display: flex;
+        position: relative;
+        padding: 90px 30px 0 30px;
+        border-radius: 10px;
+      }
+
+      .white-key {
+        width: 70px;
+        height: 280px;
+        background-color: #fff;
+        border-radius: 0 0 5px 5px;
+        border: solid #000 2px;
+        box-sizing: border-box;
+      }
+
+      .black-key {
+        width: 40px;
+        height: 160px;
+        border-radius: 0 0 5px 5px;
+        box-sizing: border-box;
+        position: absolute;
+        background-color: #000;
+      }
+
+      .black-key:nth-child(1) {
+        left: 80px;
+      }
+
+      .black-key:nth-child(2) {
+        left: 150px;
+      }
+
+      .black-key:nth-child(3) {
+        left: 290px;
+      }
+
+      .black-key:nth-child(4) {
+        left: 360px;
+      }
+
+      .black-key:nth-child(5) {
+        left: 430px;
+      }
+
+      .black-key:nth-child(6) {
+        left: 570px;
+      }
+
+      .black-key:nth-child(7) {
+        left: 640px;
+      }
+
+      .black-key:nth-child(8) {
+        left: 780px;
+      }
+
+      .black-key:nth-child(9) {
+        left: 850px;
+      }
+
+      .black-key:nth-child(10) {
+        left: 920px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="piano-container"></div>
+    <script>
+      //Audio Link: https://archive.org/details/24-piano-keys
+let pianoContainer = document.getElementsByClassName('piano-container');
+const base = './audio/';
+window.onload = () => {
+  //24 keys
+  for (let index = 1; index <= 24; index++) {
+    let div = document.createElement('div');
+    div.classList.add('key', index <= 10 ? 'black-key' : 'white-key');
+    //for playing audio on click
+    const number = index <= 9 ? '0' + index : index;
+    div.addEventListener('click', () =>
+      new Audio(`${base}key${number}.mp3`).play()
+    );
+    pianoContainer[0].appendChild(div);
+  }
+};
+    </script>
+  </body>
+</html>
