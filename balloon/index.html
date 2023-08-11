@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Name</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        background-color: blue;
+      }
+
+      .hide {
+        display: none;
+      }
+      .container {
+        /* position: relative; */
+        width: 100%;
+        height: 100%;
+        border: 1px solid red;
+        overflow: hidden;
+      }
+
+      .balloon {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        animation: float 6s linear infinite;
+        width: 5em;
+        /* transform: translateY(0); */
+      }
+      /* .balloon-animation {
+        animation: float 6s linear infinite;
+      } */
+
+      @keyframes float {
+        0% {
+          bottom: 0;
+        }
+        100% {
+          bottom: 100%;
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- <div class="container"></div> -->
+    <canvas id="balloonCanvas"></canvas>
+    <script src="./script-1.js"></script>
+  </body>
+</html>
