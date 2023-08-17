@@ -1,63 +1,81 @@
-let cardNumber = document.getElementById('card-number');
-let creditcard = document.querySelector('.credit-card');
-let cardName = document.getElementById('card-name');
-let validDate = document.getElementById('valid-date');
-let cardCvc = document.getElementById('card-cvc');
-const flipContainer = document.querySelector('#credit-card-container');
-let displayExpiryDate = document.getElementById('display-card-date');
-let cvcHolder = document.getElementById('display-cvc-holder');
-const errorMessage = document.getElementById('error-message');
-const spanElements = document.querySelectorAll('#span-container span');
+const cardNumber = document.getElementById('card-number');
+const cardHolderName = document.getElementById('card-holder-name');
+const cardNameInput = document.getElementById('card-name-input');
+const displayValidity = document.getElementById('validity');
+const validityInput = document.getElementById('validity-input');
+const cardNumberDiplay = document.querySelectorAll('.card-number-display');
+const cvvInput = document.getElementById('cvv');
+const cvvDisplay = document.getElementById('cvv-display');
 let currentSpanIndex = 0;
-
 //card number
 cardNumber.addEventListener('input', () => {
   const inputNumber = cardNumber.value.replace(/\D/g, '');
 
   cardNumber.value = cardNumber.value.slice(0, 16).replace(/\D/g, '');
 
-  for (let i = 0; i < spanElements.length; i++) {
+  for (let i = 0; i < cardNumberDiplay.length; i++) {
     if (i < inputNumber.length) {
-      spanElements[i].textContent = inputNumber[i];
+      cardNumberDiplay[i].textContent = inputNumber[i];
     } else {
-      spanElements[i].textContent = '.'; // Reset to original format
+      cardNumberDiplay[i].textContent = '_';
     }
   }
 
-  if (inputNumber.length <= spanElements.length) {
+  if (inputNumber.length <= cardNumberDiplay.length) {
     currentSpanIndex = inputNumber.length;
   } else {
-    currentSpanIndex = spanElements.length;
-  }
-
-  if (inputNumber.length > 0) {
-    flipContainer.classList.add('bg-color');
-  } else {
-    flipContainer.classList.remove('bg-color');
+    currentSpanIndex = cardNumberDiplay.length;
   }
 });
 
 //name
-cardName.addEventListener('input', () => {
-  document.getElementById('dispaly-card-name').value = cardName.value;
+cardNameInput.addEventListener('input', () => {
+  if (cardNameInput.value.length < 1) {
+    cardHolderName.innerText = 'Your Name here';
+  } else if (cardNameInput.value.length > 30) {
+    cardNameInput.value = cardNameInput.value.slice(0, 30);
+  } else {
+    cardHolderName.innerText = cardNameInput.value;
+  }
 });
 //date
-validDate.addEventListener('input', () => {
-  const inputString = validDate.value;
+validityInput.addEventListener('input', () => {
+  const inputString = validityInput.value;
+  if (inputString.length < 1) {
+    displayValidity.innerText = '06/28';
+    return false;
+  }
   const parts = inputString.split('-');
   // Extract year and month values
   const year = parts[0].slice(2);
   const month = parts[1];
 
   // Final formatted string
-  const formattedString = `${month} /${year}`;
-  displayExpiryDate.value = formattedString;
+  const formattedString = `${month}/${year}`;
+  displayValidity.innerText = formattedString;
 });
 //cvv
-cardCvc.addEventListener('input', () => {
-  const userInput = cardCvc.value;
+cvvInput.addEventListener('input', () => {
+  const userInput = cvvInput.value;
   const sanitizedInput = userInput.slice(0, 3);
-  const numericInput = sanitizedInput.replace(/\D/g, ''); // Remove non-numeric characters
-  cardCvc.value = numericInput;
-  cvcHolder.value = numericInput;
+  const numericInput = sanitizedInput.replace(/\D/g, '');
+  cvvInput.value = numericInput;
+  cvvDisplay.innerText = numericInput;
+});
+//flip
+cvvInput.addEventListener('click', () => {
+  document.getElementById('card').style.transform = 'rotateY(180deg)';
+});
+
+window.onload = () => {
+  cvvInput.value = '';
+  validityInput.value = '';
+  cardNameInput.value = '';
+  cardNumber.value = '';
+};
+//re flip the card
+document.addEventListener('click', () => {
+  if (document.activeElement.id !== 'cvv') {
+    document.getElementById('card').style.transform = 'rotateY(0deg)';
+  }
 });
