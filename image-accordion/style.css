@@ -1,0 +1,9 @@
+.gallery-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 70vh;
+}
+.item{
+    height: 100%;
+}
