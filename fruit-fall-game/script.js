@@ -54,16 +54,8 @@ function Fruit(image, x, y, width) {
   //move fruit
   this.update = () => {
     this.y += this.speed;
-    if (this.y + this.width > canvas.height) {
+    if (!this.complete && this.y + this.width > canvas.height) {
       this.complete = true;
-      //   //replace the fruit which crossed the screen with a new fruit
-      //   let index = fruits.indexOf(this);
-      //   let randomFruit =
-      //     fruitsList[generateRandomNumber(0, fruitsList.length - 1)];
-      //   const randomImage = `${base}${randomFruit}.png`;
-      //   const randomX = generateRandomNumber(0, canvas.width - 50);
-      //   const fruitWidth = generateRandomNumber(100, 200);
-      //   fruits[index] = new Fruit(randomImage, randomX, 0, fruitWidth);
     }
   };
   //draw fruit
@@ -137,6 +129,8 @@ canvas.addEventListener(events[deviceType].down, function (e) {
     if (check && !fruit.clicked) {
       fruit.clicked = true;
       points += 1;
+      fruit.complete = true;
+      fruit.y = canvas.height;
     }
   });
 });
