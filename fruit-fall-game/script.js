@@ -1,6 +1,7 @@
 //Number of fruits
 const FRUIT_COUNT = 10;
 
+const scoreContainer = document.getElementById('score-container');
 const canvas = document.getElementById('canvas');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -103,6 +104,7 @@ function createRandomFruit() {
       overText.classList.remove('hide');
       result.innerText = `Final score: ${points}`;
       startButton.innerText = 'Restart Game';
+      scoreContainer.classList.add('hide');
     }
   }
 }
@@ -129,6 +131,7 @@ canvas.addEventListener(events[deviceType].down, function (e) {
     if (check && !fruit.clicked) {
       fruit.clicked = true;
       points += 1;
+      scoreContainer.innerHTML = points;
       fruit.complete = true;
       fruit.y = canvas.height;
     }
@@ -149,4 +152,5 @@ startButton.addEventListener('click', () => {
   // Set interval to create fruits
   randomCreationTime = generateRandomNumber(3, 9);
   interval = setInterval(createRandomFruit, randomCreationTime * 1000);
+  scoreContainer.classList.remove('hide');
 });
