@@ -117,6 +117,7 @@ function animate() {
   }
   requestAnimationFrame(animate);
 }
+animate();
 
 isTouchDevice();
 
@@ -145,10 +146,10 @@ canvas.addEventListener('touchend', (e) => {
 startButton.addEventListener('click', () => {
   fruits = [];
   points = 0;
+  scoreContainer.innerHTML = points;
   canvas.classList.remove('hide');
   coverScreen.classList.add('hide');
   createRandomFruit();
-  animate();
   // Set interval to create fruits
   randomCreationTime = generateRandomNumber(3, 9);
   interval = setInterval(createRandomFruit, randomCreationTime * 1000);
