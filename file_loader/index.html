@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Loader</title>
+    <style>
+      #loader {
+        width: 100%;
+        height: 30px;
+        background-color: #f0f0f0;
+        margin-top: 20px;
+        position: relative;
+      }
+
+      #progress {
+        height: 100%;
+        background-color: #4caf50;
+        width: 0;
+      }
+
+      #progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader">
+      <div id="progress"></div>
+      <div id="progress-text">0%</div>
+    </div>
+
+    <script>
+      const fileUrl =
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+      const loader = document.getElementById('loader');
+      const progressBar = document.getElementById('progress');
+      const progressText = document.getElementById('progress-text');
+      const displayProgressBar = (value, size) => {
+        const percentage = (value / size) * 100;
+        progressBar.style.width = percentage + '%';
+        progressText.textContent = percentage.toFixed(2) + '%';
+      };
+      const startLoading = () => {
+        fetch(fileUrl)
+          .then((response) => {
+            //file size
+            const size = response.headers.get('content-length');
+            let loaded = 0;
+            const reader = response.body.getReader();
+            //Create readable Stream
+            return new ReadableStream({
+              start(controller) {
+                function pushData() {
+                  reader.read().then(({ done, value }) => {
+                    if (done) {
+                      controller.close();
+                      return;
+                    }
+                    loaded += value.byteLength;
+                    displayProgressBar(loaded, size);
+                    controller.enqueue(value);
+                    pushData();
+                  });
+                }
+                pushData();
+              },
+            });
+          })
+          .then((stream) => new Response(stream))
+          .then((response) => response.blob())
+          .then((blob) => {
+            console.log('File loaded successfully:', blob.size, 'bytes');
+          })
+          .catch((error) => {
+            console.error('Error loading file:', error);
+          });
+      };
+      window.onload = () => {
+        startLoading();
+      };
+    </script>
+  </body>
+</html>
