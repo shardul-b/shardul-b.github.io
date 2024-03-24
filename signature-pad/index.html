@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signature Pad</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .signature-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      canvas {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+
+      button {
+        margin: 0 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      #show {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
+      .signature-img {
+        width: 100px;
+        height: 100px;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="signature-container">
+      <canvas id="signature-pad" width="400" height="200"></canvas>
+      <button id="clear-btn">Clear</button>
+      <button id="save-btn">Save</button>
+    </div>
+    <div id="show"></div>
+    <script src="./script.js"></script>
+  </body>
+</html>
