@@ -11,6 +11,7 @@ const required = [
   'Literacy',
   'Urbanization',
   'GDP (official exchange rate)',
+  'Real GDP (purchasing power parity)',
   'Real GDP per capita',
   'Birth rate',
   'Population growth rate',
@@ -23,6 +24,7 @@ const expected = [
   'Literacy Rate',
   'Urbanization Rate',
   'GDP (USD)',
+  'Purchase GDP',
   'Annual Per Capita Income (USD)',
   'Birth Rate per 1000',
   'Popn GR',
@@ -55,6 +57,10 @@ const getFormattedObject = (data) => {
       // console.log(requiredData[dataValue]);
       finalData[dataValue] = requiredData[dataValue]
         ? Object.values(requiredData[dataValue]['total population'])[0]
+        : 'NA';
+    } else if (dataValue == 'Real GDP (purchasing power parity)') {
+      finalData[dataValue] = requiredData[dataValue]
+        ? Object.values(Object.values(requiredData[dataValue])[0])[0]
         : 'NA';
     } else if (dataValue == 'Real GDP per capita') {
       // console.log('Real GDP per capita');

@@ -29,7 +29,7 @@
       .country-button {
         border: 1px solid #000;
         background-color: transparent;
-        margin: 0 0.5em;
+        margin: 0.5em;
         border-radius: 5px;
       }
       .region-button:hover,
@@ -45,6 +45,10 @@
       .version {
         position: relative;
         left: 0.5em;
+        bottom: 0.5em;
+        position: fixed;
+        font-size: 0.8rem;
+        font-weight: 500;
       }
       @media only screen and (max-width: 768px) {
         .region-container {
@@ -71,8 +75,9 @@
       <button class="all-data">All Countries</button>
     </div>
     <div class="region-container"></div>
+    <hr />
     <div class="country-container"></div>
-    <p class="version">v- 1.0.1</p>
+    <p class="version">v:1.0.1</p>
   </body>
   <script src="./script.js"></script>
 </html>
