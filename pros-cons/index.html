@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Font Awesome CDN-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Pros and Cons list maker</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- List topic -->
+      <div id="topic-container" class="theme1">
+        <h3 class="heading">Enter the Topic</h3>
+        <input
+          type="text"
+          id="topic-input"
+          placeholder="Ex: Taking a Vacation"
+        />
+        <button id="submit-topic">Submit</button>
+      </div>
+
+      <!-- List  -->
+      <div class="list-container hide">
+        <!-- Top bar -->
+        <div id="list-top">
+          <p id="list-title" class="theme1"></p>
+          <button id="set-title" class="hide">
+            <i class="fas fa-check"></i>
+          </button>
+          <button id="edit-title" class="fas fa-pencil-alt"></button>
+          <button id="setting-button" class="fa fa-cog"></button>
+        </div>
+
+        <div class="list-items-container">
+          <div class="pros-section">
+            <h4 class="heading theme1">PROS</h4>
+            <div class="pros-section-items"></div>
+          </div>
+          <div class="cons-section">
+            <h4 class="heading theme1">CONS</h4>
+            <div class="cons-section-items"></div>
+          </div>
+        </div>
+        <!-- Count -->
+        <div id="list-bottom">
+          <span class="count" id="pro-count">0</span>
+          <button class="add fas fa-plus theme1"></button>
+          <span class="count" id="con-count">0</span>
+        </div>
+      </div>
+      <!-- List input -->
+      <div id="list-input" class="hide">
+        <input type="text" class="point" placeholder="Enter list item" />
+        <button class="pro">PRO</button>
+        <button class="cancel">Cancel</button>
+        <button class="con">CON</button>
+      </div>
+      <div id="theme-container" class="hide"></div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
