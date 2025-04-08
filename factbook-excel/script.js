@@ -74,6 +74,24 @@ const getFormattedObject = (data) => {
       finalData[dataValue] = requiredData[dataValue]
         ? Object.values(requiredData[dataValue]['rate of urbanization'])[0]
         : 'NA';
+    } else if (dataValue == 'Population') {
+      // Population
+      /**
+       "Population": {
+          "total": {
+            "text": "37,202,061"
+          },
+          "male": {
+            "text": "18,196,058"
+          },
+          "female": {
+            "text": "19,006,003 (2024 est.)"
+          }
+        },
+       */
+      finalData[dataValue] = requiredData[dataValue]
+        ? requiredData[dataValue]['total']['text']
+        : 'NA';
     } else {
       // console.log('ALL');
       // console.log(requiredData[dataValue]);
