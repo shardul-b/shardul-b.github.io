@@ -92,7 +92,7 @@ const getFormattedObject = (data) => {
       // finalData[dataValue] = requiredData[dataValue]
       //   ? requiredData[dataValue]['total']['text']
       //   : 'NA';
-      console.log('Population: ',requiredData[dataValue])
+      // console.log('Population: ',requiredData[dataValue])
       finalData[dataValue] = requiredData[dataValue]?.total?.text || 'NA';
     } else {
       // console.log('ALL');
